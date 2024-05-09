@@ -7,5 +7,3 @@ export default class TipoInmueble {
         this.descripcion = descripcion;
     }
 }
-
-//let hoteles = new TipoInmueble(1,"Hoteles");
