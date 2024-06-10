@@ -1,31 +1,33 @@
+import { LocalidadDao } from "../daos/localidadDao";
 import Localidad from "../models/Localidad";
 import { localidades } from "../utils";
+const { PrismaClient } = require('@prisma/client');
+const prisma = new PrismaClient();
 
 let localidadesDummy = localidades;
 
 export default class LocalidadService{
 
-    static getAllLocalidades(): Localidad[]{
-        return localidadesDummy;
+    static async getAllLocalidades(): Promise<Localidad[]>{
+        return await LocalidadDao.getAllLocalidades();
     }
 
-    static getLocalidadByCodigoPostal(id: string): Localidad[]{
-        return localidadesDummy.filter(tipoIn => tipoIn.codigoPostal === parseInt(id));
+    static async getLocalidadByCodigoPostal(id: string): Promise<Localidad[]>{
+        return await LocalidadDao.getLocalidadByCodigoPostal(id);
     }
 
-    static addLocalidad(localidad: Localidad): Localidad[]{
-        localidadesDummy.push(localidad);
-        return localidadesDummy;
+    static async addLocalidad(localidad: Localidad): Promise<Localidad[]>{
+        await LocalidadDao.addLocalidad(localidad);
+        return await LocalidadDao.getAllLocalidades();
     }
 
-    static deleteLocalidad(codigoPostal: string): Localidad[]{
-        localidadesDummy = localidadesDummy.filter(tipoIn => tipoIn.codigoPostal !== parseInt(codigoPostal));
-        return localidadesDummy;
+    static async deleteLocalidad(codigoPostal: string): Promise<Localidad[]>{
+        await LocalidadDao.deleteLocalidadByCodigoPostal(codigoPostal);
+        return await LocalidadDao.getAllLocalidades();
     };
 
-    static updateLocalidad(codigoPostal: string, descripcion: string): Localidad[]{
-        let indexInmuebleSeleccionado = localidadesDummy.findIndex(tipoIn => tipoIn.codigoPostal == parseInt(codigoPostal));
-        localidadesDummy[indexInmuebleSeleccionado].nombre = descripcion;
-        return localidadesDummy;
+    static async updateLocalidad(codigoPostal: string, descripcion: string): Promise<Localidad[]>{
+        await LocalidadDao.updateLocalidad(codigoPostal, descripcion);
+        return await LocalidadDao.getAllLocalidades();
     }
 }
