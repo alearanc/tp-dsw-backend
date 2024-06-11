@@ -17,20 +17,20 @@ export class LocalidadDao{
         return <Localidad[]> localidades;
     }
 
-    static async getLocalidadBycod_postal(cod_postal: string): Promise<Localidad[]>{
+    static async getLocalidadBycod_postal(cod_postal: number): Promise<Localidad[]>{
         const localidad = await prisma.localidad.findUnique({
             where: { cod_postal: cod_postal },
         });
         return localidad;
     }
 
-    static async deleteLocalidadBycod_postal(cod_postal: string): Promise<void> {
+    static async deleteLocalidadBycod_postal(cod_postal: number): Promise<void> {
         await prisma.localidad.delete({
             where: { cod_postal: cod_postal },
         });
     }
 
-    static async updateLocalidad(cod_postal: string, nombre: string): Promise<Localidad | null> {
+    static async updateLocalidad(cod_postal: number, nombre: string): Promise<Localidad | null> {
         const updatedLocalidad = await prisma.localidad.update({
             where: { cod_postal: cod_postal },
             data: { nombre: nombre },

@@ -14,7 +14,7 @@ router.get('/getAll', async (req: Request, res: Response) => {
 
 router.get('/get/:codigoPostal', async (req: Request, res: Response) => {
     try {
-        res.json(await LocalidadService.getLocalidadByCodigoPostal(req.params.codigoPostal));
+        res.json(await LocalidadService.getLocalidadByCodigoPostal(parseInt(req.params.codigoPostal)));
     } catch (error) {
         res.send('No se encontró la localidad.\n' + error);
     }
@@ -30,7 +30,7 @@ router.post('/add', async (req: Request, res: Response) => {
 
 router.delete('/delete/:codigoPostal', async (req: Request, res: Response) => {
     try {
-        res.json(await LocalidadService.deleteLocalidad(req.params.codigoPostal));
+        res.json(await LocalidadService.deleteLocalidad(parseInt(req.params.codigoPostal)));
     } catch (error) {
         res.send('Error al eliminar la localidad.\n' + error);
     }
@@ -38,7 +38,7 @@ router.delete('/delete/:codigoPostal', async (req: Request, res: Response) => {
 
 router.put('/update/:codigoPostal', async (req: Request, res: Response) => {
     try {
-        res.json(await LocalidadService.updateLocalidad(req.params.codigoPostal, req.body.nombre));
+        res.json(await LocalidadService.updateLocalidad(parseInt(req.params.codigoPostal), req.body.nombre));
     } catch (error) {
         res.send('Error al actualizar la localidad.\n' + error);
     }

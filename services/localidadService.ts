@@ -12,7 +12,7 @@ export default class LocalidadService{
         return await LocalidadDao.getAllLocalidades();
     }
 
-    static async getLocalidadByCodigoPostal(id: string): Promise<Localidad[]>{
+    static async getLocalidadByCodigoPostal(id: number): Promise<Localidad[]>{
         return await LocalidadDao.getLocalidadBycod_postal(id);
     }
 
@@ -21,12 +21,12 @@ export default class LocalidadService{
         return await LocalidadDao.getAllLocalidades();
     }
 
-    static async deleteLocalidad(codigoPostal: string): Promise<Localidad[]>{
+    static async deleteLocalidad(codigoPostal: number): Promise<Localidad[]>{
         await LocalidadDao.deleteLocalidadBycod_postal(codigoPostal);
         return await LocalidadDao.getAllLocalidades();
     };
 
-    static async updateLocalidad(codigoPostal: string, descripcion: string): Promise<Localidad[]>{
+    static async updateLocalidad(codigoPostal: number, descripcion: string): Promise<Localidad[]>{
         await LocalidadDao.updateLocalidad(codigoPostal, descripcion);
         return await LocalidadDao.getAllLocalidades();
     }

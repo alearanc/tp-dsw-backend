@@ -8,8 +8,8 @@ export let tiposInmuebles: TipoInmueble[] = [
 ];
 
 export let localidades: Localidad[] = [
-    new Localidad("2000", "Rosario"),
-    new Localidad("3000", "Santa Fe"),
-    new Localidad("2240", "Coronda"),
-    new Localidad("2252", "Galvez")
+    new Localidad(2000, "Rosario"),
+    new Localidad(3000, "Santa Fe"),
+    new Localidad(2240, "Coronda"),
+    new Localidad(2252, "Galvez")
 ];

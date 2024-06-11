@@ -14,7 +14,7 @@ datasource db {
 }
 
 model Localidad {
-  cod_postal String @id
+  cod_postal Int @id @unique
   nombre  String
 }
 
