@@ -14,8 +14,7 @@ datasource db {
 }
 
 model Localidad {
-  id_localidad    Int    @id @default(autoincrement())
-  cod_postal String @unique
+  cod_postal String @id
   nombre  String
 }
 

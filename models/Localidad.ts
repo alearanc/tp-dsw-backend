@@ -1,9 +1,9 @@
 export default class Localidad {
-    codigoPostal: string;
+    cod_postal: string;
     nombre: string;
 
-    constructor(codigoPostal: string, nombre:string){
-        this.codigoPostal = codigoPostal;
+    constructor(cod_postal: string, nombre:string){
+        this.cod_postal = cod_postal;
         this.nombre = nombre;
     }
 }
