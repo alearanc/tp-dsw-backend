@@ -18,3 +18,8 @@ model Localidad {
   cod_postal String @unique
   nombre  String
 }
+
+model TipoInmueble{
+  id_tipoinmueble Int    @id @default(autoincrement())
+  descripcion String
+}
