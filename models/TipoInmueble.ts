@@ -1,9 +1,9 @@
 export default class TipoInmueble {
-    idTipoInmueble: number;
+    id_tipoinmueble: number;
     descripcion: string;
 
-    constructor(idTipoInmueble: number, descripcion:string){
-        this.idTipoInmueble = idTipoInmueble;
+    constructor(id_tipoinmueble: number, descripcion:string){
+        this.id_tipoinmueble = id_tipoinmueble;
         this.descripcion = descripcion;
     }
 }

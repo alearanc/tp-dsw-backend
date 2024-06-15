@@ -1,31 +1,27 @@
+import { TipoInmuebleDao } from "../daos/tipoInmuebleDao";
 import TipoInmueble from "../models/TipoInmueble";
-import { tiposInmuebles } from "../utils";
-
-let tiposInmueblesDummy = tiposInmuebles;
 
 export default class TipoInmuebleService{
-
-    static getAllTipoInmueble(): TipoInmueble[]{
-        return tiposInmueblesDummy;
+    static async getAllTipoInmueble(): Promise<TipoInmueble[]>{
+        return await TipoInmuebleDao.getAllTipoInmueble()
     }
 
-    static getTipoInmuebleById(id: string): TipoInmueble[]{
-        return tiposInmueblesDummy.filter(tipoIn => tipoIn.idTipoInmueble === parseInt(id));
+    static async getTipoInmuebleById(id_tipoinmueble: number): Promise<TipoInmueble[]>{
+        return await TipoInmuebleDao.getTipoInmuebleByid_tipoinmueble(id_tipoinmueble);
     }
 
-    static addTipoInmueble(tipoInmueble: TipoInmueble): TipoInmueble[]{
-        tiposInmueblesDummy.push(tipoInmueble);
-        return tiposInmueblesDummy;
+    static async addTipoInmueble (tipoInmueble: TipoInmueble): Promise<TipoInmueble[]>{
+        await TipoInmuebleDao.addTipoInmueble(tipoInmueble);
+        return await TipoInmuebleDao.getAllTipoInmueble();
     }
 
-    static deleteTipoInmueble(id: string): TipoInmueble[]{
-        tiposInmueblesDummy = tiposInmueblesDummy.filter(tipoIn => tipoIn.idTipoInmueble !== parseInt(id));
-        return tiposInmueblesDummy;
-    };
-
-    static updateTipoInmueble(id: string, descripcion: string): TipoInmueble[]{
-        let indexInmuebleSeleccionado = tiposInmueblesDummy.findIndex(tipoIn => tipoIn.idTipoInmueble == parseInt(id));
-        tiposInmueblesDummy[indexInmuebleSeleccionado].descripcion = descripcion;
-        return tiposInmueblesDummy;
+    static async deleteTipoInmueble(id_tipoinmueble: number): Promise<void>{
+        return await TipoInmuebleDao.deleteTipoInmuebleByid_tipoinmueble(id_tipoinmueble);
     }
+
+    static async updateTipoInmueble(id_tipoinmueble: number, descripcion: string): Promise<TipoInmueble[]>{
+        await TipoInmuebleDao.updateTipoInmuebleByid_tipoinmueble(id_tipoinmueble, descripcion);
+        return await TipoInmuebleDao.getAllTipoInmueble();
+    }
+
 }
