@@ -1,5 +1,5 @@
 const { PrismaClient } = require('@prisma/client')
-import { UpdatePersonaParams } from '../interfaces/UpdatePersonaParams.interface'
+import { IPersona } from '../interfaces/Persona.interface'
 import Persona from '../models/Persona'
 
 const prisma = new PrismaClient()
@@ -58,7 +58,7 @@ export class PersonaDao {
     }
 
     static async updatePersona(
-        params: UpdatePersonaParams
+        params: IPersona
     ): Promise<Persona | null> {
         const {
             id_usuario,

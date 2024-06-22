@@ -1,6 +1,6 @@
 import { PersonaDao } from '../daos/personaDao'
 import Persona from '../models/Persona'
-import { UpdatePersonaParams } from '../interfaces/UpdatePersonaParams.interface'
+import { UpdatePersonaParams } from '../interfaces/Persona.interface'
 
 export default class PersonaService {
     //  Método para obtener todas las personas

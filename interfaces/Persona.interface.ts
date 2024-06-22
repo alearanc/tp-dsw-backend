@@ -1,7 +1,7 @@
 import Localidad from "../models/Localidad";
 import { TipoUsuario } from "../models/TipoUsuario.enum";
 
-export interface UpdatePersonaParams {
+export interface IPersona {
     id_usuario: number;
     nombre: string;
     apellido: string;

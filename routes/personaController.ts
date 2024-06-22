@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import PersonaService from '../services/personaService';
-import { UpdatePersonaParams } from '../interfaces/UpdatePersonaParams.interface';
+import { IPersona } from '../interfaces/Persona.interface';
 
 const express = require('express');
 const router = express.Router();
@@ -51,7 +51,7 @@ router.delete('/delete/:id_usuario', async (req: Request, res: Response) => {
 
 router.put('/update/:id_usuario', async (req: Request, res: Response) => {
     try {
-        const params: UpdatePersonaParams = {
+        const params: IPersona = {
             id_usuario: parseInt(req.params.id_usuario),
             nombre: req.body.nombre,
             apellido: req.body.apellido,
