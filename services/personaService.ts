@@ -1,6 +1,6 @@
 import { PersonaDao } from '../daos/personaDao'
 import Persona from '../models/Persona'
-import { UpdatePersonaParams } from '../interfaces/Persona.interface'
+import { IPersona } from '../interfaces/Persona.interface'
 
 export default class PersonaService {
     //  Método para obtener todas las personas
@@ -37,7 +37,7 @@ export default class PersonaService {
         }
     }
     //  Método para actualizar una persona
-    static async updatePersona(params: UpdatePersonaParams): Promise<Persona> {
+    static async updatePersona(params: IPersona): Promise<Persona> {
         try {
             await PersonaDao.updatePersona(params)
             return await PersonaDao.getPersonaByid_usuario(params.id_usuario)
