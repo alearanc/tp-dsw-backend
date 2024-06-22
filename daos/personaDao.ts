@@ -1,13 +1,13 @@
 const { PrismaClient } = require('@prisma/client')
-import Localidad from '../models/Localidad'
+import { UpdatePersonaParams } from '../interfaces/UpdatePersonaParams.interface'
 import Persona from '../models/Persona'
-import { TipoUsuario } from '../models/TipoUsuario.enum'
+
 const prisma = new PrismaClient()
 
 export class PersonaDao {
     static async addPersona(persona: Persona) {
         try {
-            const newPersona = await prisma.persona.create({
+            return await prisma.persona.create({
                 data: {
                     id_usuario: persona.id_usuario,
                     nombre: persona.nombre,
@@ -20,66 +20,76 @@ export class PersonaDao {
                     localidad: persona.localidad,
                 },
             })
-            return newPersona
         } catch (error) {
-            throw new Error(`Error: ${error.message}`)
+            throw new Error(`Error al agregar persona: ${error.message}`)
         }
     }
 
     static async getAllPersonas(): Promise<Persona[]> {
         try {
-            const personas = await prisma.persona.findMany()
-            return <Persona[]>personas
+            return (await prisma.persona.findMany()) as Persona[]
         } catch (error) {
-            throw new Error(`Error: ${error.message}`)
+            throw new Error(`Error al obtener todas las personas: ${error.message}`)
         }
     }
 
-    static async getPersonaByid_usuario(id_usuario: number): Promise<Persona[]> {
+    static async getPersonaByid_usuario(id_usuario: number): Promise<Persona> {
         try {
-            const persona = await prisma.persona.findUnique({
-                where: { id_usuario: id_usuario },
+            return await prisma.persona.findUnique({
+                where: { id_usuario },
             })
-            return persona
         } catch (error) {
-            throw new Error(`Error: ${error.message}`)
+            throw new Error(
+                `Error al obtener la persona con ID ${id_usuario}: ${error.message}`
+            )
         }
     }
 
     static async deletePersonaByid_usuario(id_usuario: number): Promise<void> {
         try {
             await prisma.persona.delete({
-                where: { id_usuario: id_usuario },
+                where: { id_usuario },
             })
         } catch (error) {
-            throw new Error(`Error: ${error.message}`)
+            throw new Error(
+                `Error al eliminar la persona con el ID ${id_usuario}: ${error.message}`
+            )
         }
     }
 
     static async updatePersona(
-        id_usuario: number,
-        nombre: string,
-        apellido: string,
-        email: string,
-        password: string,
-        tipo_usuario: TipoUsuario,
-        telefono: string,
-        domicilio: string,
-        localidad: Localidad
+        params: UpdatePersonaParams
     ): Promise<Persona | null> {
-        const updatedPersona = await prisma.persona.update({
-            where: { id_usuario: id_usuario },
-            data: {
-                nombre: nombre,
-                apellido: apellido,
-                email: email,
-                password: password,
-                tipo_usuario: tipo_usuario,
-                telefono: telefono,
-                domicilio: domicilio,
-                localidad: localidad,
-            },
-        })
-        return updatedPersona
+        const {
+            id_usuario,
+            nombre,
+            apellido,
+            email,
+            password,
+            tipo_usuario,
+            telefono,
+            domicilio,
+            localidad,
+        } = params
+
+        try {
+            return await prisma.persona.update({
+                where: { id_usuario },
+                data: {
+                    nombre,
+                    apellido,
+                    email,
+                    password,
+                    tipo_usuario,
+                    telefono,
+                    domicilio,
+                    localidad,
+                },
+            })
+        } catch (error) {
+            throw new Error(
+                `Error al actualizar la persona con ID ${id_usuario}: ${error.message}`
+            )
+        }
     }
 }
