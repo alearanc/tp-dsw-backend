@@ -1,8 +1,9 @@
-import { TipoUsuario } from './TipoUsuario.enum'
-import Localidad from './Localidad'
+import { TipoUsuario } from './TipoUsuario.enum';
+import Localidad from './Localidad';
 
 export default class Persona {
     constructor(
+        public id_usuario: number,
         public nombre: string,
         public apellido: string,
         public email: string,
@@ -11,6 +12,5 @@ export default class Persona {
         public telefono: string,
         public domicilio: string,
         public localidad: Localidad,
-        public id_usuario?: number,
     ) {}
 }

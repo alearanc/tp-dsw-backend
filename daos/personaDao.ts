@@ -1,8 +1,7 @@
-const { PrismaClient } = require('@prisma/client')
-import { IPersona } from '../interfaces/Persona.interface'
-import Persona from '../models/Persona'
+const { PrismaClient } = require('@prisma/client');
+import Persona from '../models/Persona';
 
-const prisma = new PrismaClient()
+const prisma = new PrismaClient();
 
 export class PersonaDao {
     static async addPersona(persona: Persona) {
@@ -19,17 +18,17 @@ export class PersonaDao {
                     domicilio: persona.domicilio,
                     localidad: persona.localidad,
                 },
-            })
+            });
         } catch (error) {
-            throw new Error(`Error al agregar persona: ${error.message}`)
+            throw new Error(`Error al agregar persona: ${error.message}`);
         }
     }
 
     static async getAllPersonas(): Promise<Persona[]> {
         try {
-            return (await prisma.persona.findMany()) as Persona[]
+            return (await prisma.persona.findMany()) as Persona[];
         } catch (error) {
-            throw new Error(`Error al obtener todas las personas: ${error.message}`)
+            throw new Error(`Error al obtener todas las personas: ${error.message}`);
         }
     }
 
@@ -41,7 +40,7 @@ export class PersonaDao {
         } catch (error) {
             throw new Error(
                 `Error al obtener la persona con ID ${id_usuario}: ${error.message}`
-            )
+            );
         }
     }
 
@@ -53,13 +52,13 @@ export class PersonaDao {
         } catch (error) {
             throw new Error(
                 `Error al eliminar la persona con el ID ${id_usuario}: ${error.message}`
-            )
+            );
         }
     }
 
     static async updatePersona(
-        params: IPersona
-    ): Promise<Persona | null> {
+        params: Persona
+    ): Promise<Persona> {
         const {
             id_usuario,
             nombre,
@@ -89,7 +88,7 @@ export class PersonaDao {
         } catch (error) {
             throw new Error(
                 `Error al actualizar la persona con ID ${id_usuario}: ${error.message}`
-            )
+            );
         }
     }
 }
