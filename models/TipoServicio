@@ -1,0 +1,9 @@
+export default class TipoServicio {
+    id_servicio: number;
+    descripcion_servicio: string;
+
+    constructor(idTipoServicio: number, descripcion_servicio:string){
+        this.id_servicio = id_servicio;
+        this.descripcion_servicio = descripcion_servicio;
+    }
+}
