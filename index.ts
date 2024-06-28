@@ -1,6 +1,8 @@
 const bodyParser = require('body-parser');
 const tipoInmuebleRoute = require("./routes/tipoInmuebleController")
 const localidadRoute = require("./routes/localidadController")
+const servicioRoute = require("./routes/servicioController")
+
 const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
 const express = require('express');
@@ -12,6 +14,7 @@ app.use(bodyParser.json());
 
 app.use('/tipoInmueble', tipoInmuebleRoute);
 app.use('/localidad', localidadRoute);
+app.use('/servicio', servicioRoute)
 
 app.listen(port, () => {
   console.log(`App corriendo en: ${port}`);

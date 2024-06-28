@@ -38,7 +38,7 @@ router.delete('/delete/:id_servicio', async (req: Request, res: Response) => {
 
 router.put('/update/:id_servicio', async (req: Request, res: Response) => {
     try {
-        res.json(await ServicioService.updateServicio(parseInt(req.params.id_servicio), req.body.nombre));
+        res.json(await ServicioService.updateServicio(parseInt(req.params.id_servicio), req.body.descripcion_servicio));
     } catch (error) {
         res.send('Error al actualizar el servicio.\n' + error);
     }

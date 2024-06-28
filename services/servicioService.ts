@@ -22,7 +22,7 @@ export default class ServicioService{
     }
 
     static async deleteServicio(id_servicio: number): Promise<Servicio[]>{
-        await ServicioDao.deleteservcioByid_servicio(id_servicio);
+        await ServicioDao.deleteservicioByid_servicio(id_servicio);
         return await ServicioDao.getAllservicio();
     };
 

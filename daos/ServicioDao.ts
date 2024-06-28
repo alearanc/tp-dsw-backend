@@ -18,13 +18,13 @@ export class ServicioDao {
   }
 
   static async getservicioByid_servicio(id_servicio: number): Promise<Servicio[]>{
-    const servicio = await prisma.servcio.findUnique({
+    const servicio = await prisma.servicio.findUnique({
         where: { id_servicio : id_servicio },
     });
     return servicio;
   }
 
-  static async deleteservcioByid_servicio(id_servicio: number): Promise<void>{
+  static async deleteservicioByid_servicio(id_servicio: number): Promise<void>{
     await prisma.servicio.delete({
         where: { id_servicio: id_servicio },
     });
