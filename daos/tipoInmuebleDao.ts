@@ -6,7 +6,6 @@ export class TipoInmuebleDao {
   static async addTipoInmueble (tipoInmueble: TipoInmueble){
     await prisma.TipoInmueble.create({  
       data: {
-          id_tipoinmueble: tipoInmueble.id_tipoinmueble,
           descripcion: tipoInmueble.descripcion
       }
     });

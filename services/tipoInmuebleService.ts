@@ -15,8 +15,9 @@ export default class TipoInmuebleService{
         return await TipoInmuebleDao.getAllTipoInmueble();
     }
 
-    static async deleteTipoInmueble(id_tipoinmueble: number): Promise<void>{
-        return await TipoInmuebleDao.deleteTipoInmuebleByid_tipoinmueble(id_tipoinmueble);
+    static async deleteTipoInmueble(id_tipoinmueble: number): Promise<TipoInmueble[]>{
+        await TipoInmuebleDao.deleteTipoInmuebleByid_tipoinmueble(id_tipoinmueble);
+        return await TipoInmuebleDao.getAllTipoInmueble();
     }
 
     static async updateTipoInmueble(id_tipoinmueble: number, descripcion: string): Promise<TipoInmueble[]>{
