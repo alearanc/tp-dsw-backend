@@ -67,7 +67,6 @@ export class PersonaDao {
             tipo_usuario,
             telefono,
             domicilio,
-            localidad,
         } = params
 
         try {
@@ -81,7 +80,6 @@ export class PersonaDao {
                     tipo_usuario,
                     telefono,
                     domicilio,
-                    localidad,
                 },
             })
         } catch (error) {

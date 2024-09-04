@@ -61,7 +61,6 @@ router.put('/update/:id_usuario', async (req: Request, res: Response) => {
             tipo_usuario: req.body.tipo_usuario,
             telefono: req.body.telefono,
             domicilio: req.body.domicilio,
-            localidad: req.body.localidad,
         };
 
         const updatedPersona = await PersonaService.updatePersona(params);
