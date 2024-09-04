@@ -10,7 +10,6 @@ export default class Persona {
         public password: string,
         public tipo_usuario: TipoUsuario,
         public telefono: string,
-        public domicilio: string,
-        public localidad: Localidad,
+        public domicilio: string
     ) {}
 }

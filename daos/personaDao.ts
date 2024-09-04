@@ -15,10 +15,7 @@ export class PersonaDao {
                     password: persona.password,
                     tipo_usuario: persona.tipo_usuario,
                     telefono: persona.telefono,
-                    domicilio: persona.domicilio,
-                    localidad: {
-                        connect: {cod_postal: persona.localidad.cod_postal}
-                    },
+                    domicilio: persona.domicilio
                 },
             });
         } catch (error) {

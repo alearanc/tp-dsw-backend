@@ -16,7 +16,6 @@ datasource db {
 model Localidad {
   cod_postal Int @id @unique
   nombre  String
-  personas Persona[]
 }
 
 model TipoInmueble{
@@ -33,9 +32,6 @@ model Persona {
   tipo_usuario TipoUsuario 
   telefono String
   domicilio String
-  // TODO: ver si se puede eliminar uno de los campos cod_postal
-  localidad Localidad @relation(fields: [cod_postal], references: [cod_postal])
-  cod_postal Int @unique
 }
 
 enum TipoUsuario {
