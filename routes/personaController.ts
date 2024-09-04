@@ -6,14 +6,14 @@ const express = require('express');
 const router = express.Router();
 
 const errorHandler = (res: Response, error: Error, message: string) => {
-    res.status(500).send(`${message}: ${error.message}`);
+    res.status(500).send(`${message}: ${error}`);
 }
 
 router.get('/get', async (req: Request, res: Response) => {
     try {
         res.json(await PersonaService.getAllPersonas());
     } catch (error) {
-        errorHandler(res, error, `Error al obtener todas las personas`);
+        return res.status(404).send(`Error al obtener todas las personas`);
     }
 })
 
@@ -28,7 +28,7 @@ router.get('get/:id_usuario', async (req: Request, res: Response) => {
         }
         res.json(persona);
     } catch (error) {
-        errorHandler(res, error, `Error al obtener la persona con el ID ${id_usuario}: ${error.message}`);
+        return res.status(404).send(`Error al obtener la persona con el ID ${id_usuario}: ${error}`);
     }
 });
 
@@ -36,7 +36,7 @@ router.post('/add', async (req: Request, res: Response) => {
     try {
         res.json(await PersonaService.addPersona(req.body));
     } catch (error) {
-        errorHandler(res, error, `Error al agregar a la persona: ${error.message}`);
+        return res.status(404).send(`Error al agregar a la persona: ${error}`);
     }
 });
 
@@ -45,7 +45,7 @@ router.delete('/delete/:id_usuario', async (req: Request, res: Response) => {
     try {
         res.json(await PersonaService.deletePersona(id_usuario));
     } catch (error) {
-        errorHandler(res, error, `Error al eliminar la persona con ID ${req.params.id_usuario}: ${error.message}`);
+        return res.status(404).send(`Error al eliminar la persona con ID ${req.params.id_usuario}: ${error}`);
     }
 })
 
@@ -67,6 +67,8 @@ router.put('/update/:id_usuario', async (req: Request, res: Response) => {
         const updatedPersona = await PersonaService.updatePersona(params);
         res.json(updatedPersona);
     } catch (error) {
-        errorHandler(res, error, `Error al actualizar la persona con ID ${req.params.id_usuario}: ${error.message}`);
+        return res.status(404).send(`Error al actualizar la persona con ID ${req.params.id_usuario}: ${error}`);
     }
 });
+
+module.exports = router;

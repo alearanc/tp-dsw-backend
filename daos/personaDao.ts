@@ -16,11 +16,13 @@ export class PersonaDao {
                     tipo_usuario: persona.tipo_usuario,
                     telefono: persona.telefono,
                     domicilio: persona.domicilio,
-                    localidad: persona.localidad,
+                    localidad: {
+                        connect: {cod_postal: persona.localidad.cod_postal}
+                    },
                 },
             });
         } catch (error) {
-            throw new Error(`Error al agregar persona: ${error.message}`);
+            throw new Error(`Error al agregar persona: ${error}`);
         }
     }
 
@@ -28,7 +30,7 @@ export class PersonaDao {
         try {
             return (await prisma.persona.findMany()) as Persona[];
         } catch (error) {
-            throw new Error(`Error al obtener todas las personas: ${error.message}`);
+            throw new Error(`Error al obtener todas las personas: ${error}`);
         }
     }
 
@@ -39,7 +41,7 @@ export class PersonaDao {
             })
         } catch (error) {
             throw new Error(
-                `Error al obtener la persona con ID ${id_usuario}: ${error.message}`
+                `Error al obtener la persona con ID ${id_usuario}: ${error}`
             );
         }
     }
@@ -51,7 +53,7 @@ export class PersonaDao {
             })
         } catch (error) {
             throw new Error(
-                `Error al eliminar la persona con el ID ${id_usuario}: ${error.message}`
+                `Error al eliminar la persona con el ID ${id_usuario}: ${error}`
             );
         }
     }
@@ -87,7 +89,7 @@ export class PersonaDao {
             })
         } catch (error) {
             throw new Error(
-                `Error al actualizar la persona con ID ${id_usuario}: ${error.message}`
+                `Error al actualizar la persona con ID ${id_usuario}: ${error}`
             );
         }
     }
