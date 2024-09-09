@@ -16,11 +16,13 @@ datasource db {
 model Localidad {
   cod_postal Int @id @unique
   nombre  String
+  inmuebles Inmueble[]
 }
 
 model TipoInmueble{
   id_tipoinmueble Int    @id @default(autoincrement())
   descripcion String
+  inmuebles Inmueble[]
 }
 
 model Persona {
@@ -32,6 +34,8 @@ model Persona {
   tipo_usuario TipoUsuario 
   telefono String
   domicilio String
+  inmuebles Inmueble[] @relation("PropietarioInmuebles")
+  reservas Reserva[]
 }
 
 enum TipoUsuario {
@@ -42,4 +46,46 @@ enum TipoUsuario {
 model Servicio {
   id_servicio Int @id @default(autoincrement())
   descripcion_servicio String @unique
+  inmuebles InmuebleServicio[]
+}
+
+model Inmueble {
+  id_inmueble Int @id @default(autoincrement())
+  titulo_inmueble String
+  descripcion_inmueble String
+  precio_noche Float
+  direccion_inmueble String
+  capacidad Int
+  id_tipoinmueble Int 
+  tipo_inmueble TipoInmueble @relation(fields: [id_tipoinmueble], references: [id_tipoinmueble])
+  cod_postal Int
+  localidad Localidad @relation(fields: [cod_postal], references: [cod_postal])
+  id_propietario Int
+  propietario Persona @relation("PropietarioInmuebles", fields: [id_propietario], references: [id_usuario])
+  reservas Reserva[]
+  servicios InmuebleServicio[]
+}
+
+model Reserva {
+  fecha_inicio DateTime
+  fecha_fin DateTime
+  estado String
+  observaciones String?
+  valoracion String?
+  fecha_valoracion DateTime?
+  id_inmueble Int
+  id_huesped Int
+  huesped Persona @relation(fields: [id_huesped], references: [id_usuario])
+  inmueble Inmueble @relation(fields: [id_inmueble], references: [id_inmueble])
+  
+  @@id([id_inmueble, id_huesped])
+}
+
+model InmuebleServicio {
+  id_inmueble Int
+  id_servicio Int
+  inmueble Inmueble @relation(fields: [id_inmueble], references: [id_inmueble])
+  servicio Servicio @relation(fields: [id_servicio], references: [id_servicio])
+
+  @@id([id_inmueble, id_servicio])
 }
