@@ -6,7 +6,6 @@ export class ServicioDao {
   static async addServicio (servicio: Servicio){
     await prisma.Servicio.create({  
       data: {
-          id_servicio: servicio.id_servicio,
           descripcion_servicio: servicio.descripcion_servicio
       }
     });
