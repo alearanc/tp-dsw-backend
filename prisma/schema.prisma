@@ -14,24 +14,28 @@ datasource db {
 }
 
 model Localidad {
-  cod_postal Int @id @unique
-  nombre  String
+  cod_postal Int        @id @unique
+  nombre     String
+  inmuebles  Inmueble[]
 }
 
-model TipoInmueble{
-  id_tipoinmueble Int    @id @default(autoincrement())
-  descripcion String
+model TipoInmueble {
+  id_tipoinmueble Int        @id @default(autoincrement())
+  descripcion     String
+  inmuebles       Inmueble[]
 }
 
 model Persona {
-  id_usuario Int @id @default(autoincrement())
-  nombre String
-  apellido String
-  email String
-  password String
-  tipo_usuario TipoUsuario 
-  telefono String
-  domicilio String
+  id_usuario   Int         @id @default(autoincrement())
+  nombre       String
+  apellido     String
+  email        String
+  password     String
+  tipo_usuario TipoUsuario
+  telefono     String
+  domicilio    String
+  inmuebles    Inmueble[]  @relation("PropietarioInmuebles")
+  reservas     Reserva[]
 }
 
 enum TipoUsuario {
@@ -40,6 +44,58 @@ enum TipoUsuario {
 }
 
 model Servicio {
-  id_servicio Int @id @default(autoincrement())
-  descripcion_servicio String @unique
+  id_servicio          Int                @id @default(autoincrement())
+  descripcion_servicio String             @unique
+  inmuebles            InmuebleServicio[]
+}
+
+model Inmueble {
+  id_inmueble          Int                @id @default(autoincrement())
+  titulo_inmueble      String
+  descripcion_inmueble String
+  precio_noche         Float
+  direccion_inmueble   String
+  capacidad            Int
+  id_tipoinmueble      Int
+  tipo_inmueble        TipoInmueble       @relation(fields: [id_tipoinmueble], references: [id_tipoinmueble])
+  cod_postal           Int
+  localidad            Localidad          @relation(fields: [cod_postal], references: [cod_postal])
+  id_propietario       Int
+  propietario          Persona            @relation("PropietarioInmuebles", fields: [id_propietario], references: [id_usuario])
+  reservas             Reserva[]
+  servicios            InmuebleServicio[]
+  FotoInmueble         FotoInmueble[]
+}
+
+model Reserva {
+  fecha_inicio     DateTime
+  fecha_fin        DateTime
+  estado           String
+  observaciones    String?
+  valoracion       String?
+  fecha_valoracion DateTime?
+  id_inmueble      Int
+  id_huesped       Int
+  huesped          Persona   @relation(fields: [id_huesped], references: [id_usuario])
+  inmueble         Inmueble  @relation(fields: [id_inmueble], references: [id_inmueble])
+
+  @@id([id_inmueble, id_huesped])
+}
+
+model InmuebleServicio {
+  id_inmueble Int
+  id_servicio Int
+  inmueble    Inmueble @relation(fields: [id_inmueble], references: [id_inmueble])
+  servicio    Servicio @relation(fields: [id_servicio], references: [id_servicio])
+
+  @@id([id_inmueble, id_servicio])
+}
+
+model FotoInmueble {
+  id_fotoInmueble Int      @id @default(autoincrement())
+  urlFoto         String
+  inmuebleId      Int
+  inmueble        Inmueble @relation(fields: [inmuebleId], references: [id_inmueble])
+
+  @@index([inmuebleId]) // Index para mejorar la consulta de fotos por inmueble
 }
