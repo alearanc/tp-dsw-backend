@@ -1,30 +1,47 @@
-import { Request, Response } from "express";
-const multer = require('multer');
-const path = require('path');
+import { Request, Response } from 'express';
+import FileUploader from '../services/fileUploader';
+import { PhotosDao } from '../daos/photosDao';
+import { FotoInmueble } from '@prisma/client';
 
-export default class PhotoService{
-    static storage = multer.diskStorage({
-        destination: (req: Request, file: any, cb: any) => {
-            cb(null, path.join(__dirname, '../photos/'));
-            console.log('Archivo guardado en: ', path.join(__dirname, '../photos/'));
-        },
-        filename: (req: Request, file: any, cb: any) => {
-        cb(null,Date.now() + '-' + file.originalname); // Renombramos el archivo a la fecha de subida
-        },
-    });
+export default class PhotoService {
+    static upload(req: Request, res: Response, cb: any) {
+        FileUploader.multi_upload(req, res, cb);
+    }
 
-    static multi_upload = multer({
-        storage: this.storage,
-        limits: { fileSize: 1 * 1024 * 1024 }, // 1MB
-        fileFilter: (req: Request, file: any, cb: any) => {
-            if (file.mimetype == "image/png" || file.mimetype == "image/jpg" || file.mimetype == "image/jpeg") {
-                cb(null, true);
-            } else {
-                cb(null, false);
-                const err = new Error('Solo se permiten imágenes de formato .png, .jpg and .jpeg!')
-                err.name = 'ExtensionError'
-                return cb(err);
-            }
-        },
-    }).array('uploadedImages', 2)
+    static async savePhotos(files: Express.Multer.File[], inmuebleId: number) {
+        if (!files || files.length === 0) {
+            throw new Error('No se han subido archivos.');
+        }
+
+        const fotoInmuebles = files.map((file) => ({
+            urlFoto: file.filename,
+            inmuebleId: inmuebleId
+        }));
+
+        try {
+            await PhotosDao.add(fotoInmuebles);
+            console.log('Fotos guardadas en la base de datos');
+        } catch (error) {
+            console.error('Error al guardar fotos en la base de datos:', error);
+            throw new Error('No se pudieron guardar las fotos.');
+        }
+    }
+
+    static async getPhotosByInmuebleId(inmuebleId: number): Promise<FotoInmueble[]> {
+        try {
+            return await PhotosDao.getByInmuebleId(inmuebleId);
+        } catch (error) {
+            console.error('Error al recuperar fotos:', error);
+            throw new Error('Error al recuperar fotos.');
+        }
+    }
+
+    static async deletePhotoById(id_fotoInmueble: number): Promise<void> {
+        try {
+            await PhotosDao.deleteById(id_fotoInmueble);
+        } catch (error) {
+            console.error('Error al eliminar foto:', error);
+            throw new Error('Error al eliminar foto.');
+        }
+    }
 }
