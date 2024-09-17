@@ -14,28 +14,28 @@ datasource db {
 }
 
 model Localidad {
-  cod_postal Int        @id @unique
-  nombre     String
-  inmuebles  Inmueble[]
+  cod_postal Int @id @unique
+  nombre  String
+  inmuebles Inmueble[]
 }
 
-model TipoInmueble {
-  id_tipoinmueble Int        @id @default(autoincrement())
-  descripcion     String
-  inmuebles       Inmueble[]
+model TipoInmueble{
+  id_tipoinmueble Int    @id @default(autoincrement())
+  descripcion String
+  inmuebles Inmueble[]
 }
 
 model Persona {
-  id_usuario   Int         @id @default(autoincrement())
-  nombre       String
-  apellido     String
-  email        String
-  password     String
-  tipo_usuario TipoUsuario
-  telefono     String
-  domicilio    String
-  inmuebles    Inmueble[]  @relation("PropietarioInmuebles")
-  reservas     Reserva[]
+  id_usuario Int @id @default(autoincrement())
+  nombre String
+  apellido String
+  email String
+  password String
+  tipo_usuario TipoUsuario 
+  telefono String
+  domicilio String
+  inmuebles Inmueble[] @relation("PropietarioInmuebles")
+  reservas Reserva[]
 }
 
 enum TipoUsuario {
