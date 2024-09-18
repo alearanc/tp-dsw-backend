@@ -8,7 +8,6 @@ export class PersonaDao {
         try {
             return await prisma.persona.create({
                 data: {
-                    id_usuario: persona.id_usuario,
                     nombre: persona.nombre,
                     apellido: persona.apellido,
                     email: persona.email,
@@ -70,17 +69,26 @@ export class PersonaDao {
         } = params
 
         try {
+            const personaExistente = await prisma.persona.findUnique({
+                where: { id_usuario },
+            });
+    
+            if (!personaExistente) {
+                throw new Error(`Persona con ID ${id_usuario} no encontrada.`);
+            }
+
+            const datosActualizados: any = {};
+            if (nombre !== undefined) datosActualizados.nombre = nombre;
+            if (apellido !== undefined) datosActualizados.apellido = apellido;
+            if (email !== undefined) datosActualizados.email = email;
+            if (password !== undefined) datosActualizados.password = password;
+            if (tipo_usuario !== undefined) datosActualizados.tipo_usuario = tipo_usuario;
+            if (telefono !== undefined) datosActualizados.telefono = telefono;
+            if (domicilio !== undefined) datosActualizados.domicilio = domicilio;
+
             return await prisma.persona.update({
                 where: { id_usuario },
-                data: {
-                    nombre,
-                    apellido,
-                    email,
-                    password,
-                    tipo_usuario,
-                    telefono,
-                    domicilio,
-                },
+                data: datosActualizados,
             })
         } catch (error) {
             throw new Error(
