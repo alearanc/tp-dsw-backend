@@ -18,8 +18,8 @@ export default class PersonaService {
     }
     static async addPersona(persona: Persona): Promise<Persona> {
         try {
-            await PersonaDao.addPersona(persona);
-            return persona;
+            return await PersonaDao.addPersona(persona);
+            //return persona;
         } catch (error) {
             throw new Error(`Error al agregar persona: ${error}`);
         }
