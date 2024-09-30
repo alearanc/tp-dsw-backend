@@ -8,7 +8,6 @@ export class InmuebleDao {
     try {
       return await prisma.inmueble.create({
         data: {
-          id_inmueble: inmueble.id_inmueble,
           titulo_inmueble: inmueble.titulo_inmueble,
           descripcion_inmueble: inmueble.descripcion_inmueble,
           precio_noche: inmueble.precio_noche,
