@@ -1,4 +1,5 @@
 const { PrismaClient } = require('@prisma/client');
+import bcrypt from 'bcrypt';
 import Persona from '../models/Persona';
 
 const prisma = new PrismaClient();
@@ -6,12 +7,22 @@ const prisma = new PrismaClient();
 export class PersonaDao {
     static async addPersona(persona: Persona) {
         try {
+            // Verificar si el email ya existe
+            const existingPersona = await prisma.persona.findUnique({
+                where: { email: persona.email },
+            });
+
+            if (existingPersona) {
+                throw new Error('El email ya está registrado');
+            }
+
+            const hashedPassword = await bcrypt.hash(persona.password, 10);
             return await prisma.persona.create({
                 data: {
                     nombre: persona.nombre,
                     apellido: persona.apellido,
                     email: persona.email,
-                    password: persona.password,
+                    password: hashedPassword,
                     tipo_usuario: persona.tipo_usuario,
                     telefono: persona.telefono,
                     domicilio: persona.domicilio
@@ -51,6 +62,16 @@ export class PersonaDao {
             throw new Error(
                 `Error al eliminar la persona con el ID ${id_usuario}: ${error}`
             );
+        }
+    }
+
+    static async getPersonaByEmail(email: string): Promise<Persona> {
+        try {
+            return await prisma.persona.findUnique({
+                where: { email },
+            });
+        } catch (error) {
+            throw new Error(`Error al obtener la persona con email ${email}: ${error}`);
         }
     }
 

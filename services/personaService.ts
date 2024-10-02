@@ -1,5 +1,9 @@
-import { PersonaDao } from '../daos/personaDao'
-import Persona from '../models/Persona'
+import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
+import { PersonaDao } from '../daos/personaDao';
+import Persona from '../models/Persona';
+
+const SECRET_KEY = process.env.JWT_SECRET || 'clave_secreta_para_dsw';
 
 export default class PersonaService {
     static async getAllPersonas(): Promise<Persona[]> {
@@ -19,8 +23,10 @@ export default class PersonaService {
     static async addPersona(persona: Persona): Promise<Persona> {
         try {
             return await PersonaDao.addPersona(persona);
-            //return persona;
-        } catch (error) {
+        } catch (error: any) {
+            if (error.message === 'El email ya está registrado') {
+                throw new Error('El email ya está registrado');
+            }
             throw new Error(`Error al agregar persona: ${error}`);
         }
     }
@@ -30,6 +36,20 @@ export default class PersonaService {
         } catch (error) {
             throw new Error(`Error al eliminar persona con ID ${id_usuario}: ${error}`);
         }
+    }
+    static async signin(email: string, password: string) {
+        const persona = await PersonaDao.getPersonaByEmail(email);
+        if (!persona) {
+            return null;
+        }
+    
+        const isPasswordValid = await bcrypt.compare(password, persona.password);
+        if (!isPasswordValid) {
+            return null;
+        }
+    
+        const token = jwt.sign({ id_usuario: persona.id_usuario, email: persona.email }, SECRET_KEY, { expiresIn: '1h' });
+        return { token, user: { id_usuario: persona.id_usuario, email: persona.email, nombre: persona.nombre, apellido: persona.apellido } };
     }
     static async updatePersona(params: Persona): Promise<Persona> {
         try {
