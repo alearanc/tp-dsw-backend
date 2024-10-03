@@ -49,8 +49,8 @@ export default class PersonaService {
             return null;
         }
     
-        const token = jwt.sign({ id_usuario: persona.id_usuario, email: persona.email }, SECRET_KEY, { expiresIn: '1h' });
-        return { token, user: { id_usuario: persona.id_usuario, email: persona.email, nombre: persona.nombre, apellido: persona.apellido } };
+        const token = jwt.sign({ id_usuario: persona.id_usuario}, SECRET_KEY, { expiresIn: '1h' });
+        return { token, user: { email: persona.email, nombre: persona.nombre, apellido: persona.apellido } };
     }
     static async updatePersona(params: Persona): Promise<Persona> {
         try {
