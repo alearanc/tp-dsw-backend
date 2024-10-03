@@ -29,7 +29,7 @@ model Persona {
   id_usuario Int @id @default(autoincrement())
   nombre String
   apellido String
-  email String
+  email String @unique
   password String
   tipo_usuario TipoUsuario 
   telefono String
