@@ -88,4 +88,24 @@ router.put('/update/:id_usuario', async (req: Request, res: Response) => {
     }
 });
 
+router.post('/recover_account', async (req: Request, res: Response) => {
+    const { email } = req.body;
+    try {
+        await PersonaService.recoverAccount(email);
+        res.send('Correo de recuperación enviado');
+    } catch (error) {
+        return res.status(401).send(`Error al recuperar la cuenta: ${error}`);
+    }
+});
+
+router.post('/reset_password', async (req: Request, res: Response) => {
+    const { token, newPassword } = req.body;
+    try {
+        await PersonaService.resetPassword(token, newPassword);
+        res.json({ message: 'Contraseña actualizada' });
+    } catch (error: any) {
+        return res.status(500).json({ error: `Error al restablecer la contraseña: ${error.message}` });
+    }
+});
+
 module.exports = router;

@@ -2,6 +2,7 @@ import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import { PersonaDao } from '../daos/personaDao';
 import Persona from '../models/Persona';
+import { sendRecoveryEmail } from '../services/emailService';
 
 const SECRET_KEY = process.env.JWT_SECRET || 'clave_secreta_para_dsw';
 
@@ -57,6 +58,26 @@ export default class PersonaService {
             return await PersonaDao.getPersonaByid_usuario(params.id_usuario);
         } catch (error) {
             throw new Error(`Error al actualizar persona con ID ${params.id_usuario}: ${error}`);
+        }
+    }
+
+    static async recoverAccount(email: string) {
+        const persona = await PersonaDao.getPersonaByEmail(email);
+        if (!persona) {
+            throw new Error('El email no está registrado');
+        }
+
+        const token = jwt.sign({ email }, SECRET_KEY, { expiresIn: '1h' });
+        await sendRecoveryEmail(email, token);
+    }
+
+    static async resetPassword(token: string, newPassword: string) {
+        try {
+            const decoded: any = jwt.verify(token, SECRET_KEY);
+            const email = decoded.email;
+            await PersonaDao.updatePassword(email, newPassword);
+        } catch (error) {
+            throw new Error('Token inválido o expirado');
         }
     }
 }

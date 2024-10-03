@@ -75,6 +75,18 @@ export class PersonaDao {
         }
     }
 
+    static async updatePassword(email: string, newPassword: string): Promise<void> {
+        try {
+            const hashedPassword = await bcrypt.hash(newPassword, 10);
+            await prisma.persona.update({
+                where: { email },
+                data: { password: hashedPassword },
+            });
+        } catch (error) {
+            throw new Error(`Error al actualizar la contraseña: ${error}`);
+        }
+    }
+
     static async updatePersona(
         params: Persona
     ): Promise<Persona> {
