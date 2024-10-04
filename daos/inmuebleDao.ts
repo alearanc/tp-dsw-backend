@@ -4,7 +4,7 @@ import Inmueble from "../models/Inmueble";
 const prisma = new PrismaClient();
 
 export class InmuebleDao {
-  static async addInmueble(inmueble: Inmueble) {
+  static async addInmueble(inmueble: Inmueble, propietario: number) {
     try {
       return await prisma.inmueble.create({
         data: {
@@ -15,7 +15,7 @@ export class InmuebleDao {
           capacidad: inmueble.capacidad,
           id_tipoinmueble: inmueble.tipoinmueble.id_tipoinmueble,
           cod_postal: inmueble.localidad.cod_postal,
-          id_propietario: inmueble.propietario
+          id_propietario: propietario
         },
       })
     } catch (error) {
@@ -60,7 +60,8 @@ export class InmuebleDao {
       direccion_inmueble,
       capacidad,
       tipoinmueble,
-      localidad
+      localidad,
+      propietario
     } = params
   
     try {
@@ -73,12 +74,41 @@ export class InmuebleDao {
           direccion_inmueble,
           capacidad,
           id_tipoinmueble: tipoinmueble.id_tipoinmueble,
-          cod_postal: localidad.cod_postal
+          cod_postal: localidad.cod_postal,
+          id_propietario: propietario
         },
       })
     } catch (error) {
       throw new Error(`Error al actualizar el inmueble con ID ${id_inmueble}: ${error}`);
     }
   }
+
+  static async agregarServiciosAInmueble(inmueble_id: number, servicios_ids: number[]): Promise<void> {
+    try {
+      await prisma.inmuebleService.createMany({
+        data: servicios_ids.map(servicioId => ({
+          inmueble_id: inmueble_id,
+          servicio_id: servicioId
+        })),
+      });
+    } catch (error) {
+      throw new Error(`Error al agregar servicios al inmueble con ID ${inmueble_id}: ${error}`)
+    }
+  }
   
+  static async actualizarServiciosDeInmueble(inmueble_id: number, servicios_ids: number[]): Promise<void> {
+    try {
+      await prisma.inmuebleService.deleteMany({
+        where: {inmueble_id: inmueble_id},
+      });
+      await prisma.inmuebleService.createMany({
+        data: servicios_ids.map(servicio_id => ({
+          inmueble_id: inmueble_id,
+          servicio_id: servicio_id
+        })),
+      })
+    } catch (error) {
+      throw new Error(`Error al actualizar los servicios del inmueble con ID ${inmueble_id}: ${error}`);
+    }
+  } 
 }

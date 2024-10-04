@@ -16,12 +16,13 @@ export default class InmuebleService {
             throw new Error(`Error al obtener el inmueble con ID: ${id}: ${error}`)
         }
     }
-    static async addInmueble(inmueble: Inmueble): Promise<Inmueble> {
+    static async addInmueble(inmueble: Inmueble, propietario: number, servicios: number[]): Promise<void> {
         try {
-            await InmuebleDao.addInmueble(inmueble)
-            return inmueble
+            const nuevoInmueble = await InmuebleDao.addInmueble(inmueble, propietario);
+            
+            await InmuebleDao.agregarServiciosAInmueble(nuevoInmueble.id_inmueble, servicios);
         } catch (error) {
-            throw new Error(`Error al agregar el inmueble: ${error}`)
+            throw new Error(`Error al agregar el inmueble: ${error}`);
         }
     }
     static async deleteInmueble(id_inmueble: number): Promise<void> {
@@ -33,14 +34,13 @@ export default class InmuebleService {
             )
         }
     }
-    static async updateInmueble(params: Inmueble): Promise<Inmueble> {
+    static async updateInmueble(params: Inmueble): Promise<void> {
         try {
-            await InmuebleDao.updateInmueble(params)
-            return await InmuebleDao.getInmuebleById(params.id_inmueble)
+            await InmuebleDao.updateInmueble(params);
+            const serviciosIds = params.servicios.map(servicio => servicio.id_servicio);
+            await InmuebleDao.actualizarServiciosDeInmueble(params.id_inmueble, serviciosIds);
         } catch (error) {
-            throw new Error(
-                `Error al actualizar el inmueble con ID ${params.id_inmueble}: ${error}`
-            )
+            throw new Error(`Error al actualizar el inmueble con ID ${params.id_inmueble}: ${error}`);
         }
     }
 }
