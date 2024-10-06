@@ -13,7 +13,7 @@ export class InmuebleDao {
           precio_noche: inmueble.precio_noche,
           direccion_inmueble: inmueble.direccion_inmueble,
           capacidad: inmueble.capacidad,
-          id_tipoinmueble: inmueble.tipoinmueble.id_tipoinmueble,
+          id_tipoinmueble: inmueble.tipo_inmueble.id_tipoinmueble,
           cod_postal: inmueble.localidad.cod_postal,
           id_propietario: inmueble.propietario
         },
@@ -34,7 +34,11 @@ export class InmuebleDao {
   static async getInmuebleById(id_inmueble: number): Promise<Inmueble> {
     try {
       return await prisma.inmueble.findUnique({
-        where: {id_inmueble}
+        where: {id_inmueble},
+        include: {
+          localidad: true,
+          tipo_inmueble: true,
+        },
       })
     } catch (error) {
       throw new Error(`Error al obtener el inmueble con ID ${id_inmueble}: ${error}`);
@@ -59,7 +63,7 @@ export class InmuebleDao {
       precio_noche,
       direccion_inmueble,
       capacidad,
-      tipoinmueble,
+      tipo_inmueble,
       localidad
     } = params
   
@@ -72,7 +76,7 @@ export class InmuebleDao {
           precio_noche,
           direccion_inmueble,
           capacidad,
-          id_tipoinmueble: tipoinmueble.id_tipoinmueble,
+          id_tipoinmueble: tipo_inmueble.id_tipoinmueble,
           cod_postal: localidad.cod_postal
         },
       })

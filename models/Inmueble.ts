@@ -1,6 +1,6 @@
-import TipoInmueble from './TipoInmueble';
 import Localidad from './Localidad';
 import Persona from './Persona';
+import TipoInmueble from './TipoInmueble';
 
 export default class Inmueble {
     id_inmueble: number
@@ -9,7 +9,7 @@ export default class Inmueble {
     precio_noche: number
     direccion_inmueble: string
     capacidad: number
-    tipoinmueble: TipoInmueble
+    tipo_inmueble: TipoInmueble
     localidad: Localidad
     propietario: Persona
 
@@ -20,7 +20,7 @@ export default class Inmueble {
         precio_noche: number,
         direccion_inmueble: string,
         capacidad: number,
-        tipoinmueble: TipoInmueble,
+        tipo_inmueble: TipoInmueble,
         localidad: Localidad
     ) {
         this.id_inmueble = id_inmueble
@@ -29,7 +29,7 @@ export default class Inmueble {
         this.precio_noche = precio_noche
         this.direccion_inmueble = direccion_inmueble
         this.capacidad = capacidad
-        this.tipoinmueble = tipoinmueble
+        this.tipo_inmueble = tipo_inmueble
         this.localidad = localidad
     }
 }
