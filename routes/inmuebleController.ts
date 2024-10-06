@@ -1,8 +1,9 @@
 import { Request, Response } from 'express';
-import InmuebleService from '../services/inmuebleService';
+import { verifyToken } from '../authMiddleware';
 import Inmueble from '../models/Inmueble';
-import TipoInmueble from '../models/TipoInmueble';
 import Localidad from '../models/Localidad';
+import TipoInmueble from '../models/TipoInmueble';
+import InmuebleService from '../services/inmuebleService';
 
 const express = require('express');
 const router = express.Router();
@@ -37,16 +38,16 @@ router.post('/add', async (req: Request, res: Response) => {
   }
 });
 
-router.delete('/delete/:id_inmueble', async (req: Request, res: Response) => {
+router.delete('/delete/:id_inmueble', verifyToken, async (req: any, res: Response) => {
   const id_inmueble = parseInt(req.params.id_inmueble);
   try {
-    res.json(await InmuebleService.deleteInmueble(id_inmueble));
+      res.json(await InmuebleService.deleteInmueble(id_inmueble, req.userId));
   } catch (error) {
-    return res.status(404).send(`Error al eliminar el inmueble con ID ${req.params.id_inmueble}: ${error}`);
+      return res.status(404).send(`Error al eliminar el inmueble con ID ${req.params.id_inmueble}: ${error}`);
   }
 });
 
-router.put('/update/:id_inmueble', async (req: Request, res: Response) => {
+router.put('/update/:id_inmueble', verifyToken, async (req: any, res: Response) => {
   const id_inmueble = parseInt(req.params.id_inmueble);
   try {
     const inmuebleExistente = await InmuebleService.getInmuebleById(id_inmueble);
@@ -55,8 +56,8 @@ router.put('/update/:id_inmueble', async (req: Request, res: Response) => {
     }
 
     const tipoInmueble = new TipoInmueble(
-      req.body.tipoinmueble.id_tipoinmueble,
-      req.body.tipoinmueble.descripcion
+      req.body.tipo_inmueble.id_tipoinmueble,
+      req.body.tipo_inmueble.descripcion
     );
 
     const localidad = new Localidad(
@@ -71,12 +72,12 @@ router.put('/update/:id_inmueble', async (req: Request, res: Response) => {
       precio_noche: parseFloat(req.body.precio_noche),
       direccion_inmueble: req.body.direccion_inmueble,
       capacidad: parseInt(req.body.capacidad),
-      tipoinmueble: tipoInmueble,
+      tipo_inmueble: tipoInmueble,
       localidad: localidad,
       propietario: req.body.propietario
     };
 
-    const updatedInmueble = await InmuebleService.updateInmueble(params);
+    const updatedInmueble = await InmuebleService.updateInmueble(id_inmueble, params, req.userId);
     res.json(updatedInmueble);
 
   } catch (error) {
