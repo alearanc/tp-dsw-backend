@@ -16,6 +16,15 @@ router.get('/get', async(req: Request, res: Response) => {
   }
 })
 
+router.get('/getInmuebleSinReservas', verifyToken, async (req: any, res: Response) => {
+    try {
+        const userId = req.userId;
+        res.json(await InmuebleService.getInmueblesWithoutUserReservations(userId));
+    } catch (error) {
+        return res.status(404).send(`Error al obtener inmuebles sin reservas del usuario: ${error}`);
+    }
+});
+
 router.get('/get/:id_inmueble', async (req: Request, res: Response) => {
   const id_inmueble = parseInt(req.params.id_inmueble);
   try {
