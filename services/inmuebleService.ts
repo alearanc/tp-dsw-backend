@@ -12,6 +12,15 @@ export default class InmuebleService {
             throw new Error(`Error al obtener todos los inmuebles: ${error}`)
         }
     }
+
+    static async getInmueblesWithoutUserReservations(userId: number): Promise<Inmueble[]> {
+        try {
+            return await InmuebleDao.getInmueblesWithoutUserReservations(userId);
+        } catch (error) {
+            throw new Error(`Error al obtener inmuebles sin reservas del usuario: ${error}`);
+        }
+    }
+
     static async getInmuebleById(id: number): Promise<Inmueble> {
         try {
             return await InmuebleDao.getInmuebleById(id)

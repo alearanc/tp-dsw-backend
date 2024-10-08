@@ -79,7 +79,7 @@ model Reserva {
   huesped          Persona   @relation(fields: [id_huesped], references: [id_usuario])
   inmueble         Inmueble  @relation(fields: [id_inmueble], references: [id_inmueble])
 
-  @@id([id_inmueble, id_huesped])
+  @@id([id_inmueble, id_huesped, fecha_inicio])
 }
 
 model InmuebleServicio {
