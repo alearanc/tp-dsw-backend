@@ -40,4 +40,8 @@ export default class ReservasService{
         }
     }
 
+    static async getReservas(userId: number): Promise<Reserva[]> {
+        return await ReservaDao.getReservas(userId);
+    }
+
 }
