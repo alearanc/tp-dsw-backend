@@ -13,6 +13,22 @@ export default class InmuebleService {
         }
     }
 
+    static async toggleVisibilidad(inmueble: Inmueble, userId: number): Promise<Inmueble> {
+        try {
+            return await InmuebleDao.toggleVisibilidad(inmueble, userId);
+        } catch (error) {
+            throw new Error(`Error al cambiar la visibilidad del inmueble.`);
+        }
+    }
+
+    static async getMyInmuebles(idUsuario: number): Promise<Inmueble[]> {
+        try {
+            return await InmuebleDao.getAllInmueblesById(idUsuario)
+        } catch (error) {
+            throw new Error(`Error al obtener todos los inmuebles: ${error}`)
+        }
+    }
+
     static async getInmueblesWithoutUserReservations(userId: number): Promise<Inmueble[]> {
         try {
             return await InmuebleDao.getInmueblesWithoutUserReservations(userId);

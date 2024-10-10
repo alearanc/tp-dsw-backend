@@ -57,6 +57,7 @@ model Inmueble {
   direccion_inmueble   String
   capacidad            Int
   id_tipoinmueble      Int
+  habilitado           Boolean            @default(true)
   tipo_inmueble        TipoInmueble       @relation(fields: [id_tipoinmueble], references: [id_tipoinmueble])
   cod_postal           Int
   localidad            Localidad          @relation(fields: [cod_postal], references: [cod_postal])

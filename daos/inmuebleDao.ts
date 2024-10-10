@@ -24,11 +24,37 @@ export class InmuebleDao {
     }
   }
 
+  static async toggleVisibilidad(inmueble: Inmueble, UserId: number): Promise<Inmueble> {
+    try {
+      return await prisma.inmueble.update({
+        where: { id_inmueble: inmueble.id_inmueble,
+          id_propietario: UserId},
+        data: {
+          habilitado: !inmueble.habilitado,
+        },
+      });
+    } catch (error) {
+      throw new Error(`Error al cambiar la visibilidad del inmueble.`);
+    }
+  }
+
   static async getAllInmuebles(): Promise<Inmueble[]> {
     try {
       return (await prisma.inmueble.findMany()) as Inmueble[];
     } catch (error) {
       throw new Error(`Error al obtener todos los inmuebles: ${error}`);
+    }
+  }
+
+  static async getAllInmueblesById(idUsuario: number): Promise<Inmueble[]> {
+    try {
+      return await prisma.inmueble.findMany({
+        where: {
+          id_propietario: idUsuario,
+        },
+      });
+    } catch (error) {
+      throw new Error(`Error al obtener todos mis inmuebles: ${error}`);
     }
   }
 
@@ -56,6 +82,7 @@ export class InmuebleDao {
                 id_inmueble: {
                     notIn: idsInmueblesConReservas,
                 },
+                habilitado: true,
             },
             include: {
                 localidad: true,

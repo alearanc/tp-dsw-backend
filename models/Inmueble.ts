@@ -12,6 +12,7 @@ export default class Inmueble {
     tipo_inmueble: TipoInmueble
     localidad: Localidad
     propietario: Persona
+    habilitado: Boolean
 
     constructor(
         id_inmueble: number,

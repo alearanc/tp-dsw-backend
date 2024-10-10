@@ -13,6 +13,14 @@ router.get('/getReservasByInmueble/:idInmueble', async (req: Request, res: Respo
     }
 });
 
+router.get('/getReservas', verifyToken, async (req: any, res: Response) => {
+    try {
+        res.json(await ReservasService.getReservas(parseInt(req.userId)));
+    } catch (error: any) {
+        res.send('No se encontraron reservas para el usuario.\n');
+    }
+});
+
 router.post('/reservar', verifyToken, async (req: any, res: Response) => {
     try {
         res.json(await ReservasService.reservar(req.body, req.userId));

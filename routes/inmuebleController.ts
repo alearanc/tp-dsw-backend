@@ -16,6 +16,14 @@ router.get('/get', async(req: Request, res: Response) => {
   }
 })
 
+router.get('/getMisInmuebles', verifyToken, async(req: any, res: Response) => {
+  try {
+    res.json(await InmuebleService.getMyInmuebles(parseInt(req.userId)));
+  } catch (error) {
+    return res.status(404).send(`Error al obtener todos los inmuebles`);
+  }
+});
+
 router.get('/getInmuebleSinReservas', verifyToken, async (req: any, res: Response) => {
     try {
         const userId = req.userId;
@@ -44,6 +52,14 @@ router.post('/add', async (req: Request, res: Response) => {
     res.json(await InmuebleService.addInmueble(req.body));
   } catch (error) {
     return res.status(404).send(`Error al agregar el inmueble: ${error}`);
+  }
+});
+
+router.put('/toggleVisibilidad', verifyToken, async (req: any, res: Response) => {
+  try {
+    res.json(await InmuebleService.toggleVisibilidad(req.body, req.userId));
+  } catch (error) {
+    return res.status(404).send(`Error al cambiar visibilidad del inmueble.`);
   }
 });
 
@@ -83,7 +99,8 @@ router.put('/update/:id_inmueble', verifyToken, async (req: any, res: Response) 
       capacidad: parseInt(req.body.capacidad),
       tipo_inmueble: tipoInmueble,
       localidad: localidad,
-      propietario: req.body.propietario
+      propietario: req.body.propietario,
+      habilitado: req.body.habilitado
     };
 
     const updatedInmueble = await InmuebleService.updateInmueble(id_inmueble, params, req.userId);

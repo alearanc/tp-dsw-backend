@@ -64,4 +64,21 @@ export class ReservaDao{
             throw new Error(`Error al crear la reserva: ${error}`);
         }
     }
+
+    static async getReservas(userId: number): Promise<Reserva[]> {
+        return await prisma.reserva.findMany({
+            where: {
+                id_huesped: userId,
+                estado: {
+                    not: "cancelado"
+                },
+                fecha_inicio: {
+                    gte: new Date(),
+                },
+            },
+            include: {
+                inmueble: true,
+            }
+        });
+    }
 }
