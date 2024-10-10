@@ -44,4 +44,20 @@ export default class ReservasService{
         return await ReservaDao.getReservas(userId);
     }
 
+    static async getReservasCanceladas(userId: number): Promise<Reserva[]> {
+        return await ReservaDao.getReservasCanceladas(userId);
+    }
+
+    static async getReservasPasadas(userId: number): Promise<Reserva[]> {
+        return await ReservaDao.getReservasPasadas(userId);
+    }
+
+    static async cancelarReserva(reserva: Reserva, userId: number): Promise<Reserva> {
+        try {
+            return await ReservaDao.cancelarReserva(reserva, userId);
+        } catch (error: any) {
+            throw new Error(error);
+        }
+    }
+
 }
