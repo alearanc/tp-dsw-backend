@@ -21,6 +21,22 @@ router.get('/getReservas', verifyToken, async (req: any, res: Response) => {
     }
 });
 
+router.get('/getReservasCanceladas', verifyToken, async (req: any, res: Response) => {
+    try {
+        res.json(await ReservasService.getReservasCanceladas(parseInt(req.userId)));
+    } catch (error: any) {
+        res.send('No se encontraron reservas canceladas para el usuario.\n');
+    }
+});
+
+router.get('/getReservasPasadas', verifyToken, async (req: any, res: Response) => {
+    try {
+        res.json(await ReservasService.getReservasPasadas(parseInt(req.userId)));
+    } catch (error: any) {
+        res.send('No se encontraron reservas pasadas para el usuario.\n');
+    }
+});
+
 router.post('/reservar', verifyToken, async (req: any, res: Response) => {
     try {
         res.json(await ReservasService.reservar(req.body, req.userId));
@@ -37,6 +53,14 @@ router.get('/hasFutureReservation/:id_inmueble', verifyToken, async (req: any, r
         res.json({ hasReservation });
     } catch (error: any) {
         return res.status(404).send(`Error al verificar reservas futuras: ${error}`);
+    }
+});
+
+router.put('/cancelarReserva', verifyToken, async (req: any, res: Response) => {
+    try {
+        res.json(await ReservasService.cancelarReserva(req.body, req.userId));
+    } catch (error: any) {
+        return res.status(401).send(`Error al cancelar la reserva: ${error}`);
     }
 });
 
