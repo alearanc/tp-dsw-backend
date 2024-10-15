@@ -46,8 +46,8 @@ export default class InmuebleService {
     }
     static async addInmueble(inmueble: Inmueble): Promise<Inmueble> {
         try {
-            await InmuebleDao.addInmueble(inmueble)
-            return inmueble
+            const newInmueble = await InmuebleDao.addInmueble(inmueble)
+            return newInmueble
         } catch (error) {
             throw new Error(`Error al agregar el inmueble: ${error}`)
         }

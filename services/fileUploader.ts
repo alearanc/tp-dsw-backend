@@ -15,7 +15,7 @@ export default class FileUploader {
 
     static multi_upload = multer({
         storage: this.storage,
-        limits: { fileSize: 1 * 1024 * 1024 }, // 1MB
+        limits: { fileSize: 100 * 1024 * 1024 }, // 1MB
         fileFilter: (req: Request, file: any, cb: any) => {
             if (file.mimetype === "image/png" || file.mimetype === "image/jpg" || file.mimetype === "image/jpeg") {
                 cb(null, true);
