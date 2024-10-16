@@ -6,6 +6,7 @@ const personaRoute = require("./routes/personaController")
 const inmuebleRoute = require("./routes/inmuebleController")
 const photoRoute = require("./routes/photosController")
 const reservaRoute = require("./routes/reservaController")
+const inmuebleServicioRoute= require('./routes/inmuebleServicioController')
 
 var cors = require('cors')
 const { PrismaClient } = require('@prisma/client');
@@ -29,6 +30,7 @@ app.use('/persona', personaRoute);
 app.use('/inmueble', inmuebleRoute);
 app.use('/photos', photoRoute);
 app.use('/reserva', reservaRoute);
+app.use('/inmuebleServicio', inmuebleServicioRoute);
 
 app.listen(port, () => {
   console.log(`App corriendo en: ${port}`);
