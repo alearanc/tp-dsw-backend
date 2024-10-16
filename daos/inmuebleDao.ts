@@ -5,22 +5,23 @@ import Inmueble from "../models/Inmueble";
 const prisma = new PrismaClient();
 
 export class InmuebleDao {
-  static async addInmueble(inmueble: Inmueble) {
+  static async addInmueble(inmueble: Inmueble): Promise<Inmueble> {
     try {
-      return await prisma.inmueble.create({
+      const nuevoInmueble = await prisma.inmueble.create({
         data: {
           titulo_inmueble: inmueble.titulo_inmueble,
           descripcion_inmueble: inmueble.descripcion_inmueble,
           precio_noche: inmueble.precio_noche,
           direccion_inmueble: inmueble.direccion_inmueble,
           capacidad: inmueble.capacidad,
-          id_tipoinmueble: inmueble.tipo_inmueble.id_tipoinmueble,
-          cod_postal: inmueble.localidad.cod_postal,
-          id_propietario: inmueble.propietario
+          id_tipoinmueble: 1,
+          cod_postal: 2000,
+          id_propietario: inmueble.propietario,
         },
-      })
-    } catch (error) {
-      throw new Error(`Error al agregar inmueble: ${error}`)
+      });
+      return nuevoInmueble; // Devolvemos con ID
+    } catch (error: any) {
+      throw new Error(`Error al agregar inmueble: ${error}`);
     }
   }
 

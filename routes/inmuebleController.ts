@@ -49,9 +49,11 @@ router.get('/get/:id_inmueble', async (req: Request, res: Response) => {
 
 router.post('/add', async (req: Request, res: Response) => {
   try {
-    res.json(await InmuebleService.addInmueble(req.body));
-  } catch (error) {
-    return res.status(404).send(`Error al agregar el inmueble: ${error}`);
+    const inmueble: Inmueble = req.body;
+    const nuevoInmueble = await InmuebleService.addInmueble(inmueble);
+    res.json(nuevoInmueble);
+  } catch (error: any) {
+    res.status(500).json({ error: error.message });
   }
 });
 

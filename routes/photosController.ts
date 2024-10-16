@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
+import multer from 'multer';
 import PhotoService from '../services/photosService';
-import multer, { MulterError } from 'multer';
 
 
 const express = require('express');
@@ -29,8 +29,8 @@ router.post('/add/:inmuebleId', (req: Request, res: Response) => {
         // Verificar y convertir req.files a un tipo manejable
         const files = req.files as Express.Multer.File[] | undefined;
         if (files) {
-            await PhotoService.savePhotos(files, inmuebleId);
-            res.status(200).send('Se han subido los archivos.');
+            const inmuebles = await PhotoService.savePhotos(files, inmuebleId);
+            res.status(200).send(inmuebles);
         } else {
             res.status(400).send({ error: { message: 'No se han subido archivos.' } }).end();
         }
@@ -59,7 +59,7 @@ router.delete('/:id_fotoInmueble', async (req: Request, res: Response) => {
 
     try {
         await PhotoService.deletePhotoById(id_fotoInmueble);
-        res.status(200).send('Foto eliminada con éxito.');
+        res.status(200).send({message: 'Foto eliminada con éxito.'});
     } catch (error: any) {
         res.status(500).send({ error: { message: error.message } });
     }

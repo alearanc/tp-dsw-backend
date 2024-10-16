@@ -1,7 +1,7 @@
-import { Request, Response } from 'express';
-import FileUploader from '../services/fileUploader';
-import { PhotosDao } from '../daos/photosDao';
 import { FotoInmueble } from '@prisma/client';
+import { Request, Response } from 'express';
+import { PhotosDao } from '../daos/photosDao';
+import FileUploader from '../services/fileUploader';
 
 export default class PhotoService {
     static upload(req: Request, res: Response, cb: any) {
@@ -20,7 +20,7 @@ export default class PhotoService {
 
         try {
             await PhotosDao.add(fotoInmuebles);
-            console.log('Fotos guardadas en la base de datos');
+            return PhotosDao.getByInmuebleId(inmuebleId);
         } catch (error) {
             console.error('Error al guardar fotos en la base de datos:', error);
             throw new Error('No se pudieron guardar las fotos.');
