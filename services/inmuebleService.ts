@@ -21,6 +21,22 @@ export default class InmuebleService {
         }
     }
 
+    static async getInmueblesByLocalidad(idLocalidad: number): Promise<Inmueble[]> {
+        try {
+            return await InmuebleDao.getInmueblesByLocalidad(idLocalidad);
+        } catch (error: any) {
+            throw new Error(`Error al obtener inmuebles por localidad: ${error.message}`);
+        }
+    }
+
+    static async getInmueblesByTipoInmueble(idTipoInmueble: number): Promise<Inmueble[]> {
+        try {
+            return await InmuebleDao.getInmueblesByTipoInmueble(idTipoInmueble);
+        } catch (error: any) {
+            throw new Error(`Error al obtener inmuebles por tipo de inmueble: ${error.message}`);
+        }
+    }
+
     static async getMyInmuebles(idUsuario: number): Promise<Inmueble[]> {
         try {
             return await InmuebleDao.getAllInmueblesById(idUsuario)

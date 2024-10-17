@@ -25,6 +25,30 @@ export class InmuebleDao {
     }
   }
 
+  static async getInmueblesByLocalidad(idLocalidad: number): Promise<Inmueble[]> {
+    try {
+        return await prisma.inmueble.findMany({
+            where: {
+                cod_postal: idLocalidad,
+            },
+        });
+    } catch (error) {
+        throw new Error(`Error al obtener inmuebles por localidad: ${error}`);
+    }
+  }
+
+  static async getInmueblesByTipoInmueble(idTipoInmueble: number): Promise<Inmueble[]> {
+      try {
+          return await prisma.inmueble.findMany({
+              where: {
+                  id_tipoinmueble: idTipoInmueble,
+              },
+          });
+      } catch (error) {
+          throw new Error(`Error al obtener inmuebles por tipo de inmueble: ${error}`);
+      }
+  }
+
   static async toggleVisibilidad(inmueble: Inmueble, UserId: number): Promise<Inmueble> {
     try {
       return await prisma.inmueble.update({
