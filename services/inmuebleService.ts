@@ -29,6 +29,14 @@ export default class InmuebleService {
         }
     }
 
+    static async searchInmuebles(criteria: string): Promise<Inmueble[]> {
+        try {
+            return await InmuebleDao.searchInmuebles(criteria);
+        } catch (error: any) {
+            throw new Error(`Error al buscar inmuebles: ${error.message}`);
+        }
+    }
+
     static async getInmueblesByTipoInmueble(idTipoInmueble: number): Promise<Inmueble[]> {
         try {
             return await InmuebleDao.getInmueblesByTipoInmueble(idTipoInmueble);

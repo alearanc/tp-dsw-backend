@@ -6,6 +6,7 @@
 
 generator client {
   provider = "prisma-client-js"
+  previewFeatures = ["fullTextSearch", "fullTextIndex"]
 }
 
 datasource db {
@@ -51,8 +52,8 @@ model Servicio {
 
 model Inmueble {
   id_inmueble          Int                @id @default(autoincrement())
-  titulo_inmueble      String
-  descripcion_inmueble String
+  titulo_inmueble      String             @db.Text
+  descripcion_inmueble String             @db.Text
   precio_noche         Float
   direccion_inmueble   String
   capacidad            Int
@@ -66,6 +67,7 @@ model Inmueble {
   reservas             Reserva[]
   servicios            InmuebleServicio[]
   FotoInmueble         FotoInmueble[]
+  @@fulltext([titulo_inmueble, descripcion_inmueble])
 }
 
 model Reserva {

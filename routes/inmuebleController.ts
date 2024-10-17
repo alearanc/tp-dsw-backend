@@ -47,6 +47,16 @@ router.get('/get/:id_inmueble', async (req: Request, res: Response) => {
   }
 });
 
+router.get('/search/:criteria', async (req: Request, res: Response) => {
+  const criteria = req.params.criteria;
+  try {
+      const inmuebles = await InmuebleService.searchInmuebles(criteria);
+      res.json(inmuebles);
+  } catch (error) {
+      return res.status(404).send(`Error al buscar inmuebles: ${error}`);
+  }
+});
+
 router.get('/getByLocalidad/:idLocalidad', async (req: Request, res: Response) => {
   const idLocalidad = parseInt(req.params.idLocalidad);
   try {
