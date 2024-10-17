@@ -24,6 +24,46 @@ export class InmuebleDao {
       throw new Error(`Error al agregar inmueble: ${error}`);
     }
   }
+  
+  static async searchInmuebles(criteria: string): Promise<Inmueble[]> {
+    try {
+        return await prisma.$queryRaw<Inmueble[]>`
+            SELECT i.*
+            FROM Inmueble i
+            LEFT JOIN TipoInmueble ti ON i.id_tipoinmueble = ti.id_tipoinmueble
+            LEFT JOIN Localidad l ON i.cod_postal = l.cod_postal
+            WHERE MATCH(i.titulo_inmueble, i.descripcion_inmueble) AGAINST (${criteria} IN NATURAL LANGUAGE MODE)
+            OR ti.descripcion LIKE ${'%' + criteria + '%'}
+            OR l.nombre LIKE ${'%' + criteria + '%'}
+        `;
+    } catch (error) {
+        throw new Error(`Error al buscar inmuebles: ${error}`);
+    }
+}
+
+  static async getInmueblesByLocalidad(idLocalidad: number): Promise<Inmueble[]> {
+    try {
+        return await prisma.inmueble.findMany({
+            where: {
+                cod_postal: idLocalidad,
+            },
+        });
+    } catch (error) {
+        throw new Error(`Error al obtener inmuebles por localidad: ${error}`);
+    }
+  }
+
+  static async getInmueblesByTipoInmueble(idTipoInmueble: number): Promise<Inmueble[]> {
+      try {
+          return await prisma.inmueble.findMany({
+              where: {
+                  id_tipoinmueble: idTipoInmueble,
+              },
+          });
+      } catch (error) {
+          throw new Error(`Error al obtener inmuebles por tipo de inmueble: ${error}`);
+      }
+  }
 
   static async toggleVisibilidad(inmueble: Inmueble, UserId: number): Promise<Inmueble> {
     try {

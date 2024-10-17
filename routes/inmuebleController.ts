@@ -47,6 +47,36 @@ router.get('/get/:id_inmueble', async (req: Request, res: Response) => {
   }
 });
 
+router.get('/search/:criteria', async (req: Request, res: Response) => {
+  const criteria = req.params.criteria;
+  try {
+      const inmuebles = await InmuebleService.searchInmuebles(criteria);
+      res.json(inmuebles);
+  } catch (error) {
+      return res.status(404).send(`Error al buscar inmuebles: ${error}`);
+  }
+});
+
+router.get('/getByLocalidad/:idLocalidad', async (req: Request, res: Response) => {
+  const idLocalidad = parseInt(req.params.idLocalidad);
+  try {
+      const inmuebles = await InmuebleService.getInmueblesByLocalidad(idLocalidad);
+      res.json(inmuebles);
+  } catch (error) {
+      return res.status(404).send(`Error al obtener inmuebles por localidad: ${error}`);
+  }
+});
+
+router.get('/getByTipoInmueble/:idTipoInmueble', async (req: Request, res: Response) => {
+  const idTipoInmueble = parseInt(req.params.idTipoInmueble);
+  try {
+      const inmuebles = await InmuebleService.getInmueblesByTipoInmueble(idTipoInmueble);
+      res.json(inmuebles);
+  } catch (error) {
+      return res.status(404).send(`Error al obtener inmuebles por tipo de inmueble: ${error}`);
+  }
+});
+
 router.post('/add', async (req: Request, res: Response) => {
   try {
     const inmueble: Inmueble = req.body;
