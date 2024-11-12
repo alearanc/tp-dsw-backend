@@ -120,7 +120,7 @@ Backend para la plataforma **AlquileresApp**, desarrollado en Node.js con TypeSc
   Actualiza la información de un servicio específico por su ID.
 
 ### Usuarios
-- **GET** `/api/persona/get`  
+- **GET** `/persona/get`  
 
   Retorna una lista de todos los usuarios.
 
