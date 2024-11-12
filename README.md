@@ -23,7 +23,7 @@ Backend para la plataforma **AlquileresApp**, desarrollado en Node.js con TypeSc
    ```
 5. Iniciar el servidor en desarrollo:
    ```bash
-   node run index.ts
+   node start
    ```
 ## Estructura del proyecto
 - **daos** - contiene los objetos de acceso a datos para interactuar con la base de datos. Cada archivo aquí representa una entidad o relación específica.
