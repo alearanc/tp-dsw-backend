@@ -11,6 +11,9 @@ export class ReservaDao{
                 estado: {
                     not: "Cancelado"
                 }
+            },
+            include: {
+                huesped: true
             }
         });
         return reservas;
