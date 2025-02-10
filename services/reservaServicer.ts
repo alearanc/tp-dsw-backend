@@ -52,9 +52,9 @@ export default class ReservasService{
         return await ReservaDao.getReservasPasadas(userId);
     }
 
-    static async cancelarReserva(reserva: Reserva, userId: number): Promise<Reserva> {
+    static async cancelarReserva(reserva: Reserva): Promise<Reserva> {
         try {
-            return await ReservaDao.cancelarReserva(reserva, userId);
+            return await ReservaDao.cancelarReserva(reserva);
         } catch (error: any) {
             throw new Error(error);
         }

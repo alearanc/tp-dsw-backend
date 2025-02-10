@@ -1,4 +1,5 @@
 import Reserva from "../models/Reserva";
+import { sendTurnoCancelado } from "../services/emailService";
 
 const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
@@ -11,6 +12,9 @@ export class ReservaDao{
                 estado: {
                     not: "Cancelado"
                 }
+            },
+            include: {
+                huesped: true
             }
         });
         return reservas;
@@ -114,14 +118,15 @@ export class ReservaDao{
         });
     }
 
-    static async cancelarReserva(reserva: Reserva, userId: number): Promise<Reserva> {
-        const {inmueble: {id_inmueble}, fecha_inicio} = reserva;
+    static async cancelarReserva(reserva: Reserva | any): Promise<Reserva> {
+        const {fecha_inicio} = reserva;
+        let id_inmueble = reserva.inmueble ? reserva.inmueble.id_inmueble : reserva.id_inmueble;
         try {
-            return await prisma.reserva.update({
+            let reservaCancelada = await prisma.reserva.update({
                 where: {
                     id_inmueble_id_huesped_fecha_inicio: {
+                        id_huesped: reserva.huesped.id_usuario,
                         id_inmueble: id_inmueble,
-                        id_huesped: userId,
                         fecha_inicio: fecha_inicio,
                     },
                         estado: {
@@ -132,6 +137,14 @@ export class ReservaDao{
                     estado: "Cancelado",
                 },
             });
+        let inmueble = await prisma.inmueble.findUnique({
+            where: {
+                id_inmueble: id_inmueble
+            }
+        })
+        reserva.inmueble = inmueble;
+        sendTurnoCancelado(reserva, reserva.huesped.email);
+        return reservaCancelada;
         } catch (error: any) {
             throw new Error(error);
         }
