@@ -1,5 +1,6 @@
 import dotenv from 'dotenv';
 import nodemailer from 'nodemailer';
+import Reserva from '../models/Reserva';
 
 dotenv.config();
 
@@ -18,6 +19,18 @@ export const sendRecoveryEmail = async (email: string, token: string) => {
         subject: 'Recuperación de cuenta',
         html: `<p>Para cambiar su contraseña, haga clic en el siguiente enlace:</p>
         <a href="${process.env.FRONTEND_URL}/reset-password?token=${token}">Cambiar su contraseña</a>`,
+    };
+
+    await transporter.sendMail(mailOptions);
+};
+
+export const sendTurnoCancelado = async (reserva: Reserva, email: string) => {
+    const mailOptions = {
+        from: process.env.EMAIL_USER,
+        to: email,
+        subject: 'Reserva cancelada',
+        html: `<p> La reserva del día ${reserva.fecha_inicio} en el inmueble 
+        ${reserva.inmueble.titulo_inmueble}(${reserva.inmueble.direccion_inmueble}) ha sido cancelada. </p>`,
     };
 
     await transporter.sendMail(mailOptions);

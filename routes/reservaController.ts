@@ -56,9 +56,9 @@ router.get('/hasFutureReservation/:id_inmueble', verifyToken, async (req: any, r
     }
 });
 
-router.put('/cancelarReserva', verifyToken, async (req: any, res: Response) => {
+router.put('/cancelarReserva', async (req: any, res: Response) => {
     try {
-        res.json(await ReservasService.cancelarReserva(req.body, req.userId));
+        res.json(await ReservasService.cancelarReserva(req.body));
     } catch (error: any) {
         return res.status(401).send(`Error al cancelar la reserva: ${error}`);
     }
