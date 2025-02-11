@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import TipoInmuebleService from "../services/tipoInmuebleService";
+import { isAdmin, verifyToken } from "../authMiddleware";
 
 const express = require('express')
 const router = express.Router()
@@ -25,7 +26,7 @@ router.get('/get/:id_tipoinmueble', async (req: Request, res: Response) => {
     }
 });
 
-router.post('/add', async (req: Request, res: Response) => {
+router.post('/add', verifyToken, isAdmin, async (req: Request, res: Response) => {
     try {
         res.status(200).json(await TipoInmuebleService.addTipoInmueble(req.body));
     } catch (error) {
@@ -33,7 +34,7 @@ router.post('/add', async (req: Request, res: Response) => {
     }
 });
 
-router.delete('/delete/:id_tipoinmueble', async (req: Request, res: Response) => {
+router.delete('/delete/:id_tipoinmueble', verifyToken, isAdmin, async (req: Request, res: Response) => {
     try {
         const idTipoInmueble= await TipoInmuebleService.getTipoInmuebleById(parseInt(req.params.id_tipoinmueble))
         if(!idTipoInmueble){
@@ -45,7 +46,7 @@ router.delete('/delete/:id_tipoinmueble', async (req: Request, res: Response) =>
     }
 });
 
-router.put('/update/:id_tipoinmueble', async (req: Request, res: Response) => {
+router.put('/update/:id_tipoinmueble', verifyToken, isAdmin, async (req: Request, res: Response) => {
     try {
         const idTipoInmueble= await TipoInmuebleService.getTipoInmuebleById(parseInt(req.params.id_tipoinmueble))
         if(!idTipoInmueble){

@@ -1,5 +1,4 @@
 import { TipoUsuario } from './TipoUsuario.enum';
-import Localidad from './Localidad';
 
 export default class Persona {
     constructor(
@@ -10,6 +9,7 @@ export default class Persona {
         public password: string,
         public tipo_usuario: TipoUsuario,
         public telefono: string,
-        public domicilio: string
+        public domicilio: string,
+        public isAdmin?: boolean
     ) {}
 }

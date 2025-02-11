@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import ServicioService from "../services/servicioService";
+import { isAdmin, verifyToken } from "../authMiddleware";
 
 const express = require('express')
 const router = express.Router()
@@ -20,7 +21,7 @@ router.get('/get/:id_servicio', async (req: Request, res: Response) => {
     }
 });
 
-router.post('/add', async (req: Request, res: Response) => {
+router.post('/add', verifyToken, isAdmin, async (req: Request, res: Response) => {
     try {
         res.json(await ServicioService.addservicio(req.body));
     } catch (error) {
@@ -28,7 +29,7 @@ router.post('/add', async (req: Request, res: Response) => {
     }
 });
 
-router.delete('/delete/:id_servicio', async (req: Request, res: Response) => {
+router.delete('/delete/:id_servicio', verifyToken, isAdmin, async (req: Request, res: Response) => {
     try {
         res.json(await ServicioService.deleteServicio(parseInt(req.params.id_servicio)));
     } catch (error) {
@@ -36,7 +37,7 @@ router.delete('/delete/:id_servicio', async (req: Request, res: Response) => {
     }
 });
 
-router.put('/update/:id_servicio', async (req: Request, res: Response) => {
+router.put('/update/:id_servicio', verifyToken, isAdmin, async (req: Request, res: Response) => {
     try {
         res.json(await ServicioService.updateServicio(parseInt(req.params.id_servicio), req.body.descripcion_servicio));
     } catch (error) {
