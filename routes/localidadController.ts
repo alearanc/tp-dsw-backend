@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import LocalidadService from "../services/localidadService";
+import { isAdmin, verifyToken } from "../authMiddleware";
 
 const express = require('express')
 const router = express.Router()
@@ -20,7 +21,7 @@ router.get('/get/:codigoPostal', async (req: Request, res: Response) => {
     }
 });
 
-router.post('/add', async (req: Request, res: Response) => {
+router.post('/add', verifyToken, isAdmin, async (req: Request, res: Response) => {
     try {
         res.json(await LocalidadService.addLocalidad(req.body));
     } catch (error) {
@@ -28,7 +29,7 @@ router.post('/add', async (req: Request, res: Response) => {
     }
 });
 
-router.delete('/delete/:codigoPostal', async (req: Request, res: Response) => {
+router.delete('/delete/:codigoPostal', verifyToken, isAdmin, async (req: Request, res: Response) => {
     try {
         res.json(await LocalidadService.deleteLocalidad(parseInt(req.params.codigoPostal)));
     } catch (error) {
@@ -36,7 +37,7 @@ router.delete('/delete/:codigoPostal', async (req: Request, res: Response) => {
     }
 });
 
-router.put('/update/:codigoPostal', async (req: Request, res: Response) => {
+router.put('/update/:codigoPostal', verifyToken, isAdmin, async (req: Request, res: Response) => {
     try {
         res.json(await LocalidadService.updateLocalidad(parseInt(req.params.codigoPostal), req.body.nombre));
     } catch (error) {
