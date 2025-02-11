@@ -37,6 +37,7 @@ model Persona {
   domicilio String
   inmuebles Inmueble[] @relation("PropietarioInmuebles")
   reservas Reserva[]
+  isAdmin Boolean @default(false)
 }
 
 enum TipoUsuario {
