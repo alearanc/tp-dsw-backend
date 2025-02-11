@@ -1,5 +1,4 @@
 import { TipoUsuario } from './TipoUsuario.enum';
-import Localidad from './Localidad';
 
 export default class Persona {
     constructor(
