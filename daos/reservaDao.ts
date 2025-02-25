@@ -149,4 +149,36 @@ export class ReservaDao{
             throw new Error(error);
         }
     }
+    
+    static async valorarReserva(data: {
+        id_inmueble: number;
+        id_huesped: number;
+        fecha_inicio: Date;
+        puntuacion: number;
+    }): Promise<Reserva> {
+        const { id_inmueble, id_huesped, fecha_inicio, puntuacion } = data;
+
+        try {
+            const updatedReserva = await prisma.reserva.update({
+                where: {
+                    id_inmueble_id_huesped_fecha_inicio: {
+                        id_inmueble,
+                        id_huesped,
+                        fecha_inicio,
+                    },
+                },
+                data: {
+                    puntuacion,
+                    fecha_valoracion: new Date(),
+                },
+                include: {
+                    inmueble: true,
+                    huesped: true,
+                },
+            });
+            return updatedReserva;
+        } catch (error: any) {
+            throw new Error(`Error al actualizar la valoración: ${error}`);
+        }
+    }
 }

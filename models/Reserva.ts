@@ -6,7 +6,7 @@ export default class Reserva{
     fecha_fin: Date
     estado: String
     observaciones: String
-    valoracion: String
+    puntuacion: String
     fechaValoracion: Date
     inmueble: Inmueble
     huesped: Persona
