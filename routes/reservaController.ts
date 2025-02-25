@@ -64,4 +64,20 @@ router.put('/cancelarReserva', async (req: any, res: Response) => {
     }
 });
 
+router.put('/valorarReserva', verifyToken, async (req: any, res: Response) => {
+    try {
+        const { id_inmueble, fecha_inicio, puntuacion} = req.body;
+        const userId = req.userId; // Viene del token
+        const updatedReserva = await ReservasService.valorarReserva({
+            id_inmueble,
+            id_huesped: userId,
+            fecha_inicio: new Date(fecha_inicio),
+            puntuacion,
+        });
+        res.json(updatedReserva);
+    } catch (error: any) {
+        res.status(400).send(`Error al valorar la reserva: ${error.message}`);
+    }
+});
+
 module.exports = router;

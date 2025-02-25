@@ -1,5 +1,7 @@
 import { ReservaDao } from "../daos/reservaDao";
 import Reserva from "../models/Reserva";
+const { PrismaClient } = require('@prisma/client');
+const prisma = new PrismaClient();
 
 export default class ReservasService{
 
@@ -58,6 +60,50 @@ export default class ReservasService{
         } catch (error: any) {
             throw new Error(error);
         }
+    }
+
+    static async valorarReserva(data: {
+        id_inmueble: number;
+        id_huesped: number;
+        fecha_inicio: Date;
+        puntuacion: number;
+    }): Promise<Reserva> {
+        const { id_inmueble, id_huesped, fecha_inicio, puntuacion } = data;
+
+        if (!Number.isInteger(puntuacion) || puntuacion < 1 || puntuacion > 5) {
+            throw new Error("La puntuación debe ser un número entero entre 1 y 5");
+        }
+
+        try {
+            const updatedReserva = await ReservaDao.valorarReserva({
+                id_inmueble,
+                id_huesped,
+                fecha_inicio,
+                puntuacion,
+            });
+
+            await this.actualizarPromedioInmueble(id_inmueble);
+
+            return updatedReserva;
+        } catch (error: any) {
+            throw new Error(`Error al valorar la reserva: ${error.message}`);
+        }
+    }
+
+    static async actualizarPromedioInmueble(id_inmueble: number): Promise<void> {
+        const reservas = await ReservaDao.getReservasByInmueble(id_inmueble);
+        const puntuaciones = reservas
+            .filter((r: any) => r.puntuacion > 0)
+            .map((r: any) => r.puntuacion);
+    
+        const promedio = puntuaciones.length > 0
+            ? puntuaciones.reduce((sum: any, p: any) => sum + p, 0) / puntuaciones.length
+            : null;
+    
+        await prisma.inmueble.update({
+            where: { id_inmueble },
+            data: { puntuacion_promedio: promedio },
+        });
     }
 
 }

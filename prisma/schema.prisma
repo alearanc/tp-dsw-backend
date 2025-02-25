@@ -68,6 +68,7 @@ model Inmueble {
   reservas             Reserva[]
   servicios            InmuebleServicio[]
   FotoInmueble         FotoInmueble[]
+  puntuacion_promedio  Float?
   @@fulltext([titulo_inmueble, descripcion_inmueble])
 }
 
@@ -76,7 +77,7 @@ model Reserva {
   fecha_fin        DateTime
   estado           String
   observaciones    String?
-  valoracion       String?
+  puntuacion       Int       @default(0)
   fecha_valoracion DateTime?
   id_inmueble      Int
   id_huesped       Int
