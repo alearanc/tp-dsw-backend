@@ -9,8 +9,6 @@ const reservaRoute = require("./routes/reservaController")
 const inmuebleServicioRoute= require('./routes/inmuebleServicioController')
 
 var cors = require('cors')
-const { PrismaClient } = require('@prisma/client');
-const prisma = new PrismaClient();
 const express = require('express');
 const app = express();
 import path from 'path';
