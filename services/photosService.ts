@@ -1,11 +1,23 @@
 import { FotoInmueble } from '@prisma/client';
-import { Request, Response } from 'express';
 import { PhotosDao } from '../daos/photosDao';
-import FileUploader from '../services/fileUploader';
+const FormData = require('form-data');
+const fetch = require('node-fetch');
 
 export default class PhotoService {
-    static upload(req: Request, res: Response, cb: any) {
-        FileUploader.multi_upload(req, res, cb);
+    static async uploadToImgBB(file: Express.Multer.File): Promise<string> {
+        const formData = new FormData();
+        formData.append('image', file.buffer.toString('base64'));
+        
+        const response = await fetch(`https://api.imgbb.com/1/upload?key=${process.env.IMGBB_API_KEY}`, {
+            method: 'POST',
+            body: formData
+        });
+        
+        const data = await response.json();
+        if (!data.success) {
+            throw new Error('Failed to upload to ImgBB');
+        }
+        return data.data.url;
     }
 
     static async savePhotos(files: Express.Multer.File[], inmuebleId: number) {
@@ -13,16 +25,20 @@ export default class PhotoService {
             throw new Error('No se han subido archivos.');
         }
 
-        const fotoInmuebles = files.map((file) => ({
-            urlFoto: file.filename,
-            inmuebleId: inmuebleId
-        }));
+        const uploadPromises = files.map(async (file) => {
+            const url = await this.uploadToImgBB(file);
+            return {
+                urlFoto: url,
+                inmuebleId: inmuebleId
+            };
+        });
 
         try {
+            const fotoInmuebles = await Promise.all(uploadPromises);
             await PhotosDao.add(fotoInmuebles);
             return PhotosDao.getByInmuebleId(inmuebleId);
         } catch (error) {
-            console.error('Error al guardar fotos en la base de datos:', error);
+            console.error('Error al guardar fotos:', error);
             throw new Error('No se pudieron guardar las fotos.');
         }
     }

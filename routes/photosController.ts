@@ -6,35 +6,23 @@ import PhotoService from '../services/photosService';
 const express = require('express');
 const router = express.Router();
 
-router.post('/add/:inmuebleId', (req: Request, res: Response) => {
-    PhotoService.upload(req, res, async (err: any) => {
-        if (err instanceof multer.MulterError) {
-            res.status(500).send({ error: { message: `Error: ${err.message}` } }).end();
-            return;
-        } else if (err) {
-            if (err.name === 'ExtensionError') {
-                res.status(413).send({ error: { message: err.message } }).end();
-            } else {
-                res.status(500).send({ error: { message: `Error: ${err.message}` } }).end();
-            }
-            return;
-        }
-
+router.post('/add/:inmuebleId', async (req: Request, res: Response) => {
+    try {
         const inmuebleId = parseInt(req.params.inmuebleId);
         if (!inmuebleId) {
-            res.status(400).send({ error: { message: 'El ID del inmueble es requerido.' } }).end();
-            return;
+            return res.status(400).send({ error: { message: 'El ID del inmueble es requerido.' } });
         }
 
-        // Verificar y convertir req.files a un tipo manejable
         const files = req.files as Express.Multer.File[] | undefined;
-        if (files) {
-            const inmuebles = await PhotoService.savePhotos(files, inmuebleId);
-            res.status(200).send(inmuebles);
-        } else {
-            res.status(400).send({ error: { message: 'No se han subido archivos.' } }).end();
+        if (!files || files.length === 0) {
+            return res.status(400).send({ error: { message: 'No se han subido archivos.' } });
         }
-    });
+
+        const inmuebles = await PhotoService.savePhotos(files, inmuebleId);
+        res.status(200).send(inmuebles);
+    } catch (err: any) {
+        res.status(500).send({ error: { message: `Error: ${err.message}` } });
+    }
 });
 
 router.get('/get/:inmuebleId', async (req: Request, res: Response) => {
