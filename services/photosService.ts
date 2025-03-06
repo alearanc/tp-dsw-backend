@@ -6,18 +6,29 @@ const fetch = require('node-fetch');
 export default class PhotoService {
     static async uploadToImgBB(file: Express.Multer.File): Promise<string> {
         const formData = new FormData();
-        formData.append('image', file.buffer.toString('base64'));
-        
-        const response = await fetch(`https://api.imgbb.com/1/upload?key=${process.env.IMGBB_API_KEY}`, {
-            method: 'POST',
-            body: formData
+        formData.append('image', file.buffer, {
+            filename: file.originalname,
+            contentType: file.mimetype
         });
         
-        const data = await response.json();
-        if (!data.success) {
-            throw new Error('Failed to upload to ImgBB');
+        try {
+            const response = await fetch(`https://api.imgbb.com/1/upload?key=${process.env.IMGBB_API_KEY}`, {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    ...formData.getHeaders()
+                }
+            });
+
+            const data = await response.json();
+            if (!data.success) {
+                throw new Error(data.error?.message || 'Failed to upload to ImgBB');
+            }
+            return data.data.url;
+        } catch (error) {
+            console.error('ImgBB upload error:', error);
+            throw error;
         }
-        return data.data.url;
     }
 
     static async savePhotos(files: Express.Multer.File[], inmuebleId: number) {

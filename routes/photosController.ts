@@ -1,15 +1,13 @@
 import { Request, Response } from "express";
-import multer from 'multer';
 import PhotoService from '../services/photosService';
-
-
+import FileUploader from '../services/fileUploader';
 const express = require('express');
 const router = express.Router();
 
-router.post('/add/:inmuebleId', async (req: Request, res: Response) => {
+router.post('/add/:inmuebleId', FileUploader.multi_upload, async (req: Request, res: Response) => {
     try {
         const inmuebleId = parseInt(req.params.inmuebleId);
-        if (!inmuebleId) {
+        if (isNaN(inmuebleId)) {
             return res.status(400).send({ error: { message: 'El ID del inmueble es requerido.' } });
         }
 
@@ -21,6 +19,7 @@ router.post('/add/:inmuebleId', async (req: Request, res: Response) => {
         const inmuebles = await PhotoService.savePhotos(files, inmuebleId);
         res.status(200).send(inmuebles);
     } catch (err: any) {
+        console.error('Upload error:', err);
         res.status(500).send({ error: { message: `Error: ${err.message}` } });
     }
 });
