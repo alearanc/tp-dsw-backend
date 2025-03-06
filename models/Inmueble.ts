@@ -11,8 +11,8 @@ export default class Inmueble {
     capacidad: number
     tipo_inmueble: TipoInmueble
     localidad: Localidad
-    propietario: Persona
-    habilitado: Boolean
+    propietario!: Persona
+    habilitado!: Boolean
 
     constructor(
         id_inmueble: number,

@@ -1,5 +1,5 @@
 export default class FotoInmueble {
-    id_fotoInmueble: number;
+    id_fotoInmueble!: number;
     urlFoto: string;
     inmuebleId: number;
 
