@@ -15,7 +15,7 @@ Backend para la plataforma **AlquileresApp**, desarrollado en Node.js con TypeSc
    ```
 3. Configurar las variables de entorno en un archivo ``.env``, incluyendo la conexión a la base de datos:
    ```plaintext
-   DATABASE_URL="mysql://root:@localhost:3306/testdb" // ruta por defecto
+   DATABASE_URL="mysql://root@localhost:3306/testdb" // ruta por defecto
    ```
 4. Ejecutar Prisma para sincronizar el esquema de la base de datos:
    ```bash
