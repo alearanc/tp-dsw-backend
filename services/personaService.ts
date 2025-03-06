@@ -41,14 +41,14 @@ export default class PersonaService {
     static async signin(email: string, password: string) {
         const persona = await PersonaDao.getPersonaByEmail(email);
         if (!persona) {
-            return null;
+            throw new Error('Credenciales inválidas');
         }
-    
+        
         const isPasswordValid = await bcrypt.compare(password, persona.password);
         if (!isPasswordValid) {
-            return null;
+            throw new Error('Credenciales inválidas');
         }
-    
+        
         const token = jwt.sign({ id_usuario: persona.id_usuario, tipo_usuario: persona.tipo_usuario, isAdmin: persona.isAdmin }, SECRET_KEY, { expiresIn: '1h' });
         return { token, user: { email: persona.email, nombre: persona.nombre, apellido: persona.apellido } };
     }

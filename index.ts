@@ -30,6 +30,13 @@ app.use('/photos', photoRoute);
 app.use('/reserva', reservaRoute);
 app.use('/inmuebleServicio', inmuebleServicioRoute);
 
+app.use((err: any, res: any) => {
+  if (err.message === 'Credenciales inválidas') {
+      return res.status(401).json({ error: 'Credenciales inválidas' });
+  }
+  res.status(500).json({ error: 'Error interno del servidor' });
+});
+
 app.listen(port, () => {
   console.log(`App corriendo en: ${port}`);
 });
