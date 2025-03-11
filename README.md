@@ -1,5 +1,5 @@
-# AlquileresApp
-Backend para la plataforma **AlquileresApp**, desarrollado en Node.js con TypeScript. Este servidor proporciona una API RESTful que permite gestionar propiedades (inmuebles), usuarios y reservas para el alquiler temporal de inmuebles. Utiliza una Prisma como ORM para la conexión a una base de datos MySQL, gestionada mediante XAMPP.
+# Escapeo
+Backend para la plataforma **Escapeo**, desarrollado en Node.js con TypeScript. Este servidor proporciona una API RESTful que permite gestionar propiedades (inmuebles), usuarios y reservas para el alquiler temporal de inmuebles. Utiliza una Prisma como ORM para la conexión a una base de datos MySQL, gestionada mediante XAMPP.
 
 ## Requisitos previos
 - Node.js
